@@ -14,9 +14,9 @@ const create = (elm, attributes) => {
 
 recipesArray.forEach(recipe => {
 	//image
-	let image = create("img", {class: "card-img-top bg-secondary", height: "200px", src: "#", alt: "card-image"});
+	let image = create("div", {class: "card-img-top card-img-placeholder", alt: "card-image"});
 	//title
-	let title = create("h2", {class: "card-title w-50", style: "font-size:1.5rem"});
+	let title = create("h2", {class: "card-title w-50 card-content-title"});
 	title.textContent = recipe[1].name;
 
 	let timeParent = create("div", {class: "d-flex font-weight-bold"});
@@ -48,14 +48,14 @@ recipesArray.forEach(recipe => {
 	method.textContent = recipe[1].description;
 
 	//card body
-	let cardBody = create("div", {class: "card-body d-flex justify-content-between text-truncate text-wrap", style: "height:10rem"});
+	let cardBody = create("div", {class: "card-body d-flex justify-content-between card-content"});
 	//combine in card body
 	cardBody.appendChild(ingredients);
 	cardBody.appendChild(method);
 
 
 	//card container
-	let cardContainer = create("article", {class: "card bg-light pb-3"});
+	let cardContainer = create("article", {class: "card recipe-card pb-3"});
 
 	//container parent
 	let containerParent = create("div", {class: "col-4 mb-5"});

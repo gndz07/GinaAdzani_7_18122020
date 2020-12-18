@@ -1,0 +1,22 @@
+.card-img-placeholder {
+	background-color: #c9bdbd;
+	min-height: 200px;
+	border-radius: 10px 10px 0 0;
+}
+
+.recipe-card {
+	background-color: #f8f9fb;
+	border-radius: 10px;
+	height: 450px;
+}
+
+.card-content {
+	font-size: 0.9rem;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-height: 150px;
+}
+
+.card-content-title {
+	font-size: 1.5rem;
+}
