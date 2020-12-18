@@ -55,7 +55,7 @@ recipesArray.forEach(recipe => {
 
 
 	//card container
-	let cardContainer = create("article", {class: "card rounded bg-light pb-3"});
+	let cardContainer = create("article", {class: "card bg-light pb-3"});
 
 	//container parent
 	let containerParent = create("div", {class: "col-4 mb-5"});
