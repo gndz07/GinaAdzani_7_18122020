@@ -20,3 +20,18 @@
 .card-content-title {
 	font-size: 1.5rem;
 }
+
+.btn {
+	padding: 1.25rem;
+	font-weight: 500;
+}
+
+.btn-green {
+	background-color: #00dca9;
+	color: white;
+}
+
+.btn-orange {
+	background-color: #ff5a47;
+	color: white;
+}
