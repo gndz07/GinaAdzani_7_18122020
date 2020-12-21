@@ -1,6 +1,6 @@
 import {recipes} from './recipe-rawdata.js';
 
-const recipesArray = Object.entries(recipes);
+let recipesArray = Object.entries(recipes);
 
 console.log(recipesArray);
 //function to create element
@@ -69,5 +69,50 @@ recipesArray.forEach(recipe => {
 	let mainSection = document.getElementById("main");
 	//put into DOM
 	mainSection.appendChild(containerParent);
-
 })
+
+//sorting function set
+//function to swap position
+let swap = (items, leftIndex, rightIndex) => {
+	var temp = items[leftIndex];
+	items[leftIndex] = items[rightIndex];
+	items[rightIndex] = temp;
+}
+//partition code, to make a left and right elements list
+let partition = (items, attribute, left, right) => {
+	let pivot = items[Math.floor((right + left) / 2)][1][attribute]; //middle element
+
+	while (left <= right) {
+		while (items[left][1][attribute].localeCompare(pivot) < 0) {
+			left++;
+		}
+		while (items[right][1][attribute].localeCompare(pivot) > 0) {
+			right--;
+		}
+		if (left <= right) {
+			swap(items, left, right);
+			left++;
+			right--;
+		}
+	}
+	return left;
+}
+
+let quickSort = (items, attribute, left, right) => {
+	//duplicate the array to sort
+	//let sortedArray = [...items]; //why it doesn't work as well if I use this duplicate array?
+
+	let index;
+	if (items.length > 1) {
+       	index = partition(items, attribute, left, right); //take index from partition
+       	if (left<index-1) { //more elements on the left
+       		quickSort(items, attribute, left, index-1);
+       	}
+       	if (index<right) { //more elements on the right
+       		quickSort(items, attribute, index, right);
+       	}
+	}
+	return items;
+}
+
+console.log(quickSort(recipesArray, "name", 0, recipesArray.length-1));
