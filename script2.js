@@ -71,6 +71,28 @@ recipesArray.forEach(recipe => {
 	mainSection.appendChild(containerParent);
 })
 
+//fill the dropdown menu
+//function to put elements into the DOM
+let addItem = (array, parentElm) => {
+	array.forEach(item => {
+		let option = create("li", {class: "dropdown-item"});
+		option.textContent = item.charAt(0).toUpperCase() + item.slice(1);
+		parentElm.appendChild(option);
+	})
+}
+//extract all unique ingredients into one array
+let ingredientsOptions = [...new Set(recipesArray.map(a => a[1].ingredients.map(b => b.ingredient)).flat())];
+//put ingredients options into dropdown
+addItem(ingredientsOptions, document.getElementById("ingredients-dropdown"));
+//extract all unique tools into one array
+let appliancesOptions = [...new Set(recipesArray.map(a => a[1].appliance))];
+//put appliances options into dropdown
+addItem(appliancesOptions, document.getElementById("appliances-dropdown"));
+//extract all unique utensils into one array
+let utensilsOptions = [...new Set(recipesArray.map(a => a[1].ustensils).flat())];
+//put utensils options into dropdown
+addItem(utensilsOptions, document.getElementById("utensils-dropdown"));
+
 //sorting function set
 //function to swap position
 let swap = (items, leftIndex, rightIndex) => {
@@ -116,3 +138,29 @@ let quickSort = (items, attribute, left, right) => {
 }
 
 console.log(quickSort(recipesArray, "name", 0, recipesArray.length-1));
+
+//binary search function
+let searchRecipe = (items, attribute, left, right, target) => {
+	quickSort(recipesArray, "name", 0, recipesArray.length-1);
+	let startIndex = 0;
+	let endIndex = items.length-1;
+	//get middle index
+	while (startIndex <= endIndex) {
+		let middleIndex = Math.floor((startIndex+endIndex)/2);
+
+		if (target === items[middleIndex][1][attribute]) {
+			return console.log(middleIndex);
+		}
+
+		if (target.localeCompare(items[middleIndex][1][attribute]) < 0) {
+			endIndex = middleIndex -1;
+		}
+
+		if (target.localeCompare(items[middleIndex][1][attribute]) > 0) {
+			startIndex = middleIndex + 1;
+		}
+		else {
+			console.log("Item not found");
+		}
+	}
+}
