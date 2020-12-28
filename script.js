@@ -172,20 +172,93 @@ let splitString = (array) => {
 }
 
 //extract all unique ingredients into one array
-let ingredientsOptions = [...new Set(recipesArray.map(a => a[1].ingredients.map(b => b.ingredient)).flat())];
+let ingredientsOptions = [...new Set(recipesArray.map(a => a[1].ingredients.map(b => b.ingredient.toLowerCase())).flat())];
 //words from ingredients options
 let ingredientsWords = [...new Set(splitString(ingredientsOptions).flat())];
 //get lists of words from recipe name 
-let recipeName = [...new Set(recipesArray.map(a => a[1].name))];
+let recipeName = [...new Set(recipesArray.map(a => a[1].name.toLowerCase()))];
 let recipeNameWords = [...new Set(splitString(recipeName).flat())];
 //get lists of words from descriptions
-let recipeDesc = [...new Set(recipesArray.map(a => a[1].description))];
-let recipeDescWords = [...new Set(splitString(recipeDesc).flat())];
+let recipeDesc = [...new Set(recipesArray.map(a => a[1].description.toLowerCase().replace(/[^\w\s+è+ç+é+ï+à+ù+û+ô+ê+î]/gi, "")))];
+let recipeDescWords = splitString(recipeDesc).flat();
 //combine all options into one array for the main search
 let searchOptions = [...new Set(ingredientsWords.concat(recipeNameWords, recipeDescWords))]; //array of 890 strings
 
-var tree = tokenTree(searchOptions);
-var currentTokenSet = 'co'; 
-//var list = tree.getWords(currentTokenSet);
+//autocomplete function
+let autocomplete = (input, arr) => {
+	let currentFocus; //to catch when user input something new
+	
+		input.addEventListener("input", function(e) {
+			let val = this.value;
+			//take out all of current autocompleted values
+			closeLists();
+			if (!val) { return false;}
+			currentFocus = -1;
+			//create div element that will contain the suggestions
+			let a = create("div", {class: "autocomplete-items", id: this.id+"autocomplete-lists"});
+			//append to parent element
+			this.parentNode.appendChild(a);
+			//launch the trie function
+			let tree = tokenTree(arr);
+			let lists = tree.getWords(val);
+			//shows each item in the list
+			lists.forEach(item => {
+				let b = create("p");
+				b.textContent = item;
+				//when click on the value
+				b.addEventListener("click", function() {
+					//insert value
+					input.value = this.textContent;
+					//close list
+					closeLists();
+				});
+				a.appendChild(b);
+			})
+		});
+		//execute function on keydown
+		input.addEventListener("keydown", function(e) {
+			let x = document.getElementById(this.id + "autocomplete-lists");
+			if (x) x = x.getElementsByTagName("p");
+			if (e.keyCode == 40) { //key down
+				currentFocus++;
+				addActive(x);
+			} else if (e.keyCode == 38) { //key up
+				currentFocus--;
+				addActive(x)
+			} else if (e.keyCode == 13) { //enter
+				e.preventDefault();
+				if (currentFocus > -1) {
+					if (x) x[currentFocus].click();
+				}
+			}
+		});
+		let addActive = (x) => {
+			if (!x) return false;
+			//remove other active class
+			removeActive(x);
+			if (currentFocus >= x.length) currentFocus = 0;
+			if (currentFocus < 0) currentFocus = (x.length - 1);
+			//add active class
+			x[currentFocus].classList.add("autocomplete-active");
+		}
+		let removeActive = (x) => {
+			for (let i=0; i<x.length; i++) {
+				x[i].classList.remove("autocomplete-active");
+			}
+		}
+		let closeLists = (element) => {
+			let x = document.getElementsByClassName("autocomplete-items");
+			for (let i=0; i<x.length; i++) {
+				if (element != x[i] && element != input) {
+					x[i].parentNode.removeChild(x[i]);
+				}
+			}
+		}
+		document.addEventListener("click", function(e) {
+			closeLists(e.target);
+		})
+	
+}
 
-console.log(tree.getWords("ma"));
+//implement the function on key press
+autocomplete(document.getElementById("search-input"), searchOptions);

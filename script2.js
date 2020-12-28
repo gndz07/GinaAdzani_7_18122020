@@ -71,28 +71,6 @@ recipesArray.forEach(recipe => {
 	mainSection.appendChild(containerParent);
 })
 
-//fill the dropdown menu
-//function to put elements into the DOM
-let addItem = (array, parentElm) => {
-	array.forEach(item => {
-		let option = create("li", {class: "dropdown-item"});
-		option.textContent = item.charAt(0).toUpperCase() + item.slice(1);
-		parentElm.appendChild(option);
-	})
-}
-//extract all unique ingredients into one array
-let ingredientsOptions = [...new Set(recipesArray.map(a => a[1].ingredients.map(b => b.ingredient)).flat())];
-//put ingredients options into dropdown
-addItem(ingredientsOptions, document.getElementById("ingredients-dropdown"));
-//extract all unique tools into one array
-let appliancesOptions = [...new Set(recipesArray.map(a => a[1].appliance))];
-//put appliances options into dropdown
-addItem(appliancesOptions, document.getElementById("appliances-dropdown"));
-//extract all unique utensils into one array
-let utensilsOptions = [...new Set(recipesArray.map(a => a[1].ustensils).flat())];
-//put utensils options into dropdown
-addItem(utensilsOptions, document.getElementById("utensils-dropdown"));
-
 //sorting function set
 //function to swap position
 let swap = (items, leftIndex, rightIndex) => {
@@ -137,30 +115,130 @@ let quickSort = (items, attribute, left, right) => {
 	return items;
 }
 
-console.log(quickSort(recipesArray, "name", 0, recipesArray.length-1));
-
 //binary search function
-let searchRecipe = (items, attribute, left, right, target) => {
-	quickSort(recipesArray, "name", 0, recipesArray.length-1);
-	let startIndex = 0;
-	let endIndex = items.length-1;
-	//get middle index
-	while (startIndex <= endIndex) {
-		let middleIndex = Math.floor((startIndex+endIndex)/2);
+let binarySearch = (array, attribute, target) => {
+	let start = 0;
+	let end = array.length-1;
+	while(start<=end) {
+		let middleIndex = Math.floor((start+end)/2);
 
-		if (target === items[middleIndex][1][attribute]) {
-			return console.log(middleIndex);
-		}
-
-		if (target.localeCompare(items[middleIndex][1][attribute]) < 0) {
-			endIndex = middleIndex -1;
-		}
-
-		if (target.localeCompare(items[middleIndex][1][attribute]) > 0) {
-			startIndex = middleIndex + 1;
-		}
-		else {
-			console.log("Item not found");
+		if (array[middleIndex][1][attribute] == target) {
+			console.log(array[middleIndex][1][attribute]);
+			return array[middleIndex][1][attribute];
+		} else if (target.localeCompare(array[middleIndex][1][attribute]) < 0) {
+			end = middleIndex - 1;
+		} else if (target.localeCompare(array[middleIndex][1][attribute]) > 0) {
+			start = middleIndex +1;
+		} else {
+			console.log("not found");
+			return -1;
 		}
 	}
 }
+
+//fill the dropdown menu
+//function to put elements into the DOM
+let addItem = (array, parentElm) => {
+	array.forEach(item => {
+		let option = create("li", {class: "dropdown-item"});
+		option.textContent = item.charAt(0).toUpperCase() + item.slice(1);
+		parentElm.appendChild(option);
+	})
+}
+//extract all unique ingredients into one array
+let ingredientsOptions = [...new Set(recipesArray.map(a => a[1].ingredients.map(b => b.ingredient)).flat())];
+//put ingredients options into dropdown
+addItem(ingredientsOptions, document.getElementById("ingredients-dropdown"));
+//extract all unique tools into one array
+let appliancesOptions = [...new Set(recipesArray.map(a => a[1].appliance))];
+//put appliances options into dropdown
+addItem(appliancesOptions, document.getElementById("appliances-dropdown"));
+//extract all unique utensils into one array
+let utensilsOptions = [...new Set(recipesArray.map(a => a[1].ustensils).flat())];
+//put utensils options into dropdown
+addItem(utensilsOptions, document.getElementById("utensils-dropdown"));
+
+//partition code, to make a left and right elements list
+let partitionSimple = (array, left, right) => {
+	let pivot = array[Math.floor((right + left) / 2)]; //middle element
+
+	while (left <= right) {
+		while (array[left].localeCompare(pivot) < 0) {
+			left++;
+		}
+		while (array[right].localeCompare(pivot) > 0) {
+			right--;
+		}
+		if (left <= right) {
+			swap(array, left, right);
+			left++;
+			right--;
+		}
+	}
+	return left;
+}
+
+let quickSortSimple = (array, left, right) => {
+	let index;
+	if (array.length > 1) {
+       	index = partitionSimple(array, left, right); //take index from partition
+       	if (left<index-1) { //more elements on the left
+       		quickSortSimple(array, left, index-1);
+       	}
+       	if (index<right) { //more elements on the right
+       		quickSortSimple(array, index, right);
+       	}
+	}
+	return array;
+}
+//binary search function
+let binarySearchSimple = (array, target) => {
+	let start = 0;
+	let end = array.length-1;
+	while(start <= end) {
+		let middleIndex = Math.floor((start+end)/2);
+
+		if (array[middleIndex].toLowerCase() == target.toLowerCase()) {
+			return array[middleIndex];
+		} else if (target.toLowerCase().localeCompare(array[middleIndex].toLowerCase()) < 0) {
+			end = middleIndex - 1;
+		} else if (target.toLowerCase().localeCompare(array[middleIndex].toLowerCase()) > 0) {
+			start = middleIndex +1;
+		} else {
+			console.log("not found");
+			return -1;
+		}
+	}
+}
+
+//function to split
+let splitString = (array) => {
+	let newArr = [];
+	for (var i=0; i<array.length; i++) {
+		newArr.push(array[i].split(" "));
+	}
+	return newArr;
+}
+
+//get lists of words from recipe name 
+let recipeName = [...new Set(recipesArray.map(a => a[1].name))];
+let recipeNameWords = [...new Set(splitString(recipeName).flat())];
+//get lists of words from descriptions
+let recipeDesc = [...new Set(recipesArray.map(a => a[1].description))];
+let recipeDescWords = [...new Set(splitString(recipeDesc).flat())];
+//words from ingredients options
+let ingredientsWords = [...new Set(splitString(ingredientsOptions).flat())];
+//combine all options into one array for the main search
+let searchOptions = [...new Set(ingredientsWords.concat(recipeNameWords, recipeDescWords))];
+
+let sortedOptions = quickSortSimple(searchOptions, 0, searchOptions.length-1);
+console.log(sortedOptions);
+
+function searchSuggestion(value) {
+	if (value.length > 2) {
+		document.getElementById("ingredients-dropdown").innerHTML = "";
+		let result = binarySearchSimple(searchOptions, value);
+	}
+}
+
+

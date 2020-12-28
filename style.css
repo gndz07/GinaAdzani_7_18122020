@@ -35,3 +35,17 @@
 	background-color: #ff5a47;
 	color: white;
 }
+
+.autocomplete-items {
+	position: absolute;
+	z-index: 2;
+	top: 100%;
+	left: 20px;
+	background-color: white;
+	width: 100%;
+}
+
+.autocomplete-items p:hover {
+	cursor: pointer;
+	background-color: #f8f9fb;
+}
