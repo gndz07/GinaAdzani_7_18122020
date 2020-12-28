@@ -1,3 +1,8 @@
+input[type="text"] {
+	border: none;
+	border-color: transparent;
+}
+
 .card-img-placeholder {
 	background-color: #c9bdbd;
 	min-height: 200px;
@@ -26,12 +31,12 @@
 	font-weight: 500;
 }
 
-.btn-green {
+.bg-green {
 	background-color: #00dca9;
 	color: white;
 }
 
-.btn-orange {
+.bg-orange {
 	background-color: #ff5a47;
 	color: white;
 }
@@ -47,5 +52,64 @@
 
 .autocomplete-items p:hover {
 	cursor: pointer;
-	background-color: #f8f9fb;
+	background-color: #c9bdbd;
+}
+
+.autocomplete-active {
+	background-color: #c9bdbd;
+}
+
+.dropdown-container {
+	position: relative;
+}
+
+.dropdown-options {
+	display: none;
+}
+
+.dropdown-options.show-opts {
+	position: absolute;
+	top: 100%;
+	left: 10px;
+	max-height: 400px;
+	z-index: 999;
+	display: flex;
+	flex-flow: column wrap;
+	padding: .5rem;
+	margin: .125rem 0 0;
+	border-radius: .25rem;
+}
+
+.fa-chevron-down {
+	margin-left: 1rem;
+	margin-top: .5rem;
+}
+
+.tag-btn {
+	display: flex;
+	justify-content: space-between;
+	color: white;
+}
+.tag-search {
+	background-color: transparent;
+	border: none;
+	width: 90%;
+}
+
+.tag-search::placeholder {
+	color: white;
+}
+
+#ingredient-search-autocomplete-lists {
+	background-color: #007bff;
+}
+
+.dropdown-item {
+	color: white;
+}
+
+.dropdown-menu.show {
+	display: flex;
+	flex-flow: column wrap;
+	max-height: 400px;
 }

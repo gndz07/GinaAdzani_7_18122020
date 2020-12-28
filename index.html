@@ -27,31 +27,37 @@
 			<div class="col input-group input-group-lg mx-5" id="autocomplete">
 				<input class="form-control bg-light" id="search-input" type="text" name="search-input" placeholder="Rechercher un ingrédient, appareil, ustensils ou une recette">
 				<div class="input-group-append">
-					<!-- <span class="input-group-text">
+					<span class="input-group-text">
 						<i class="fas fa-search"></i>
-					</span> -->
+					</span>
 				</div>
 			</div>
 		</div>
 
 		<div class="btn-group ml-5 my-4">
-     		<div class="dropdown">
-     			<button class="btn btn-primary dropdown-toggle btn-lg mx-2" type="button" data-toggle="dropdown" data-display="static">Ingrédients</button>
-     			<ul class="dropdown-menu" id="ingredients-dropdown">
+     		<div class="dropdown-container">
+     			<button id="ingredients-tag-btn" class="btn btn-primary btn-lg mx-2 tag-btn" type="button" data-val="Ingrédient">Ingrédients
+     				<span class="fas fa-chevron-down"></span>
+     			</button>
+     			<ul class="dropdown-options bg-primary" id="ingredients-dropdown">
      				
      			</ul>
      		</div>
 
-   			<div class="dropdown">
-     			<button class="btn btn-green dropdown-toggle btn-lg mx-2" type="button" data-toggle="dropdown" data-display="static">Appareil</button>
-     			<ul class="dropdown-menu" id="appliances-dropdown">
+   			<div class="dropdown-container">
+     			<button id="appliances-tag-btn" class="btn bg-green btn-lg mx-2 tag-btn" type="button" data-val="Appareil">Appareils
+     				<span class="fas fa-chevron-down"></span>
+     			</button>
+     			<ul class="dropdown-options bg-green" id="appliances-dropdown">
      			
      			</ul>
      		</div>
 
-     		<div class="dropdown">
-     			<button class="btn btn-orange dropdown-toggle btn-lg mx-2" type="button" data-toggle="dropdown" data-display="static">Ustensils</button>
-     			<ul class="dropdown-menu" id="utensils-dropdown">
+     		<div class="dropdown-container">
+     			<button id="utensils-tag-btn" class="btn bg-orange btn-lg mx-2 tag-btn" type="button" data-val="Ustensil">Ustensils
+     				<span class="fas fa-chevron-down"></span>
+     			</button>
+     			<ul class="dropdown-options bg-orange" id="utensils-dropdown">
      			
      			</ul>
      		</div>

@@ -185,35 +185,39 @@ let recipeDescWords = splitString(recipeDesc).flat();
 let searchOptions = [...new Set(ingredientsWords.concat(recipeNameWords, recipeDescWords))]; //array of 890 strings
 
 //autocomplete function
-let autocomplete = (input, arr) => {
+let autocomplete = (input, arr, minLength) => {
 	let currentFocus; //to catch when user input something new
 	
 		input.addEventListener("input", function(e) {
-			let val = this.value;
-			//take out all of current autocompleted values
-			closeLists();
-			if (!val) { return false;}
-			currentFocus = -1;
-			//create div element that will contain the suggestions
-			let a = create("div", {class: "autocomplete-items", id: this.id+"autocomplete-lists"});
-			//append to parent element
-			this.parentNode.appendChild(a);
-			//launch the trie function
-			let tree = tokenTree(arr);
-			let lists = tree.getWords(val);
-			//shows each item in the list
-			lists.forEach(item => {
-				let b = create("p");
-				b.textContent = item;
-				//when click on the value
-				b.addEventListener("click", function() {
-					//insert value
-					input.value = this.textContent;
-					//close list
-					closeLists();
-				});
-				a.appendChild(b);
-			})
+			if (input.value.length > minLength) {
+				let val = this.value;
+				//take out all of current autocompleted values
+				closeLists();
+				if (!val) { return false;}
+				currentFocus = -1;
+				//create div element that will contain the suggestions
+				let a = create("div", {class: "autocomplete-items", id: this.id+"-autocomplete-lists"});
+				//append to parent element
+				this.parentNode.appendChild(a);
+				//launch the trie function
+				let tree = tokenTree(arr);
+				let lists = tree.getWords(val);
+				//shows each item in the list
+				lists.forEach(item => {
+					let b = create("p");
+					b.textContent = item;
+					//when click on the value
+					b.addEventListener("click", function() {
+						//insert value
+						input.value = this.textContent;
+						//close list
+						closeLists();
+					});
+					a.appendChild(b);
+				})
+			} else {
+				closeLists();
+			}
 		});
 		//execute function on keydown
 		input.addEventListener("keydown", function(e) {
@@ -230,6 +234,8 @@ let autocomplete = (input, arr) => {
 				if (currentFocus > -1) {
 					if (x) x[currentFocus].click();
 				}
+			} else if (e.keyCode == 27) { //escape
+				closeLists();
 			}
 		});
 		let addActive = (x) => {
@@ -261,4 +267,61 @@ let autocomplete = (input, arr) => {
 }
 
 //implement the function on key press
-autocomplete(document.getElementById("search-input"), searchOptions);
+autocomplete(document.getElementById("search-input"), searchOptions, 2);
+
+//add item to dropdown function
+let addItem = (array, parentElm) => {
+	array.forEach(item => {
+		let option = create("li", {class: "dropdown-item"});
+		option.textContent = item.charAt(0).toUpperCase() + item.slice(1);
+		parentElm.appendChild(option);
+	})
+}
+//put ingredients options into dropdown
+addItem(ingredientsOptions, document.getElementById("ingredients-dropdown"));
+//extract all unique tools into one array
+let appliancesOptions = [...new Set(recipesArray.map(a => a[1].appliance))];
+//put appliances options into dropdown
+addItem(appliancesOptions, document.getElementById("appliances-dropdown"));
+//extract all unique utensils into one array
+let utensilsOptions = [...new Set(recipesArray.map(a => a[1].ustensils).flat())];
+//put utensils options into dropdown
+addItem(utensilsOptions, document.getElementById("utensils-dropdown"));
+
+let openDropdown = (btn, placeholder, id) => {
+	btn.addEventListener("click", function() {
+		if (!btn.hasAttribute("style")) {
+			removeClass(dropDownOptions, "show-opts");
+			btn.style.width = "400px";
+			btn.innerHTML = "<input type='text' class='tag-search'" + placeholder + id + "class='tag-search-bar'><span class='fas fa-chevron-up'></span>";
+			btn.nextElementSibling.classList.add("show-opts");
+		} 
+	})
+}
+let removeClass = (array, className) => {
+	array.forEach(item => {
+		item.classList.remove(className);
+	})
+}
+//implement function to each button
+openDropdown(document.getElementById("ingredients-tag-btn"), "placeholder='Rechercher un ingrédient...'", "id='ingredient-search'");
+openDropdown(document.getElementById("appliances-tag-btn"), "placeholder='Rechercher un appareil...'", "id='appliance-search'");
+openDropdown(document.getElementById("utensils-tag-btn"), "placeholder='Rechercher un ustensil...'", "id='utensil-search'");
+
+
+let dropDownOptions = Array.from(document.getElementsByClassName("dropdown-options"));
+
+document.addEventListener("click", function(e) {
+	if (e.target.matches(".fa-chevron-up")) {
+		e.target.parentElement.removeAttribute("style");
+		e.target.parentElement.innerHTML = e.target.parentElement.getAttribute("data-val") + "<span class='fas fa-chevron-down'></span>";
+		removeClass(dropDownOptions, "show-opts");
+	}
+})
+
+document.addEventListener("click", function(e) {
+	if (e.target.matches("#ingredient-search")) {
+		autocomplete(document.getElementById("ingredient-search"), ingredientsOptions, 0);
+		removeClass(dropDownOptions, "show-opts");
+	}
+})
