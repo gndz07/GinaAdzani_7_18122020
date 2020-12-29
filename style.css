@@ -48,6 +48,10 @@ input[type="text"] {
 	left: 20px;
 	background-color: white;
 	width: 100%;
+	padding-left: .5rem;
+	text-align: left;
+	font-weight: 400;
+	font-size: 1rem;
 }
 
 .autocomplete-items p:hover {
@@ -102,6 +106,14 @@ input[type="text"] {
 
 #ingredient-search-autocomplete-lists {
 	background-color: #007bff;
+}
+
+#appliance-search-autocomplete-lists {
+	background-color: #00dca9;
+}
+
+#utensil-search-autocomplete-lists {
+	background-color: #ff5a47;
 }
 
 .dropdown-item {

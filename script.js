@@ -291,7 +291,6 @@ addItem(utensilsOptions, document.getElementById("utensils-dropdown"));
 let openDropdown = (btn, placeholder, id) => {
 	btn.addEventListener("click", function() {
 		if (!btn.hasAttribute("style")) {
-			removeClass(dropDownOptions, "show-opts");
 			btn.style.width = "400px";
 			btn.innerHTML = "<input type='text' class='tag-search'" + placeholder + id + "class='tag-search-bar'><span class='fas fa-chevron-up'></span>";
 			btn.nextElementSibling.classList.add("show-opts");
@@ -322,6 +321,12 @@ document.addEventListener("click", function(e) {
 document.addEventListener("click", function(e) {
 	if (e.target.matches("#ingredient-search")) {
 		autocomplete(document.getElementById("ingredient-search"), ingredientsOptions, 0);
+		removeClass(dropDownOptions, "show-opts");
+	} else if (e.target.matches("#appliance-search")) {
+		autocomplete(document.getElementById("appliance-search"), appliancesOptions, 0);
+		removeClass(dropDownOptions, "show-opts");
+	} else if (e.target.matches("#utensil-search")) {
+		autocomplete(document.getElementById("utensil-search"), utensilsOptions, 0);
 		removeClass(dropDownOptions, "show-opts");
 	}
 })
