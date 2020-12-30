@@ -55,20 +55,16 @@ recipesArray.forEach(recipe => {
 
 
 	//card container
-	let cardContainer = create("article", {class: "card recipe-card pb-3"});
-
-	//container parent
-	let containerParent = create("div", {class: "col-4 mb-5"});
+	let cardContainer = create("article", {class: "card recipe-card pb-3 mb-5"});
 
 	//combine to DOM
-	containerParent.appendChild(cardContainer);
 	cardContainer.appendChild(image);
 	cardContainer.appendChild(headerParent);
 	cardContainer.appendChild(cardBody);
 
 	let mainSection = document.getElementById("main");
 	//put into DOM
-	mainSection.appendChild(containerParent);
+	mainSection.appendChild(cardContainer);
 })
 
 //token tree creation function
