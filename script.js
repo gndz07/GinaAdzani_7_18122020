@@ -55,20 +55,20 @@ recipesArray.forEach(recipe => {
 
 
 	//card container
-	let cardContainer = create("article", {class: "card recipe-card pb-3"});
+	let cardContainer = create("article", {class: "card recipe-card pb-3 mb-5"});
 
 	//container parent
-	let containerParent = create("div", {class: "col-4 mb-5"});
+	//let containerParent = create("div", {class: "mb-5"});
 
 	//combine to DOM
-	containerParent.appendChild(cardContainer);
+	//containerParent.appendChild(cardContainer);
 	cardContainer.appendChild(image);
 	cardContainer.appendChild(headerParent);
 	cardContainer.appendChild(cardBody);
 
 	let mainSection = document.getElementById("main");
 	//put into DOM
-	mainSection.appendChild(containerParent);
+	mainSection.appendChild(cardContainer);
 })
 
 //function to split
@@ -172,11 +172,10 @@ let autocomplete = (input, arr, minLength) => {
 		document.addEventListener("click", function(e) {
 			closeLists(e.target);
 		})
-	
 }
-
+let searchInput = document.getElementById("search-input");
 //implement the function on key press
-autocomplete(document.getElementById("search-input"), searchOptions, 2);
+autocomplete(searchInput, searchOptions, 2);
 
 //add item to dropdown function
 let addItem = (array, parentElm) => {
@@ -238,5 +237,23 @@ document.addEventListener("click", function(e) {
 	} else if (e.target.matches("#utensil-search")) {
 		autocomplete(document.getElementById("utensil-search"), utensilsOptions, 0);
 		removeClass(dropDownOptions, "show-opts");
+	}
+})
+
+let launchSearch = document.getElementById("launch-search");
+//click on search
+launchSearch.addEventListener("click", function() {
+	if (searchInput.value.length > 0) {
+		let input = searchInput.value.toLowerCase();
+
+		let recipeCards = Array.from(document.getElementsByClassName("recipe-card"));
+
+		for (let i = 0; i< recipeCards.length; i++) {
+			if (!recipeCards[i].innerHTML.toLowerCase().includes(input)) {
+				recipeCards[i].style.display = "none";
+			} else {
+				recipeCards[i].style.display = "";
+			}
+		}
 	}
 })
