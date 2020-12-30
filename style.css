@@ -115,3 +115,9 @@ input[type="text"] {
 	flex-flow: column wrap;
 	max-height: 400px;
 }
+
+
+.selected-tag-btn {
+	color: white;
+	margin-right: 1rem;
+}

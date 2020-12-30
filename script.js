@@ -177,7 +177,26 @@ let searchInput = document.getElementById("search-input");
 //implement the function on key press
 autocomplete(searchInput, searchOptions, 2);
 
-//add item to dropdown function
+//search the DOM content
+let launchSearch = document.getElementById("launch-search");
+//click on search
+launchSearch.addEventListener("click", function() {
+	if (searchInput.value.length > 0) {
+		let input = searchInput.value.toLowerCase();
+
+		let recipeCards = Array.from(document.getElementsByClassName("recipe-card"));
+
+		for (let i = 0; i< recipeCards.length; i++) {
+			if (!recipeCards[i].innerHTML.toLowerCase().includes(input)) {
+				recipeCards[i].style.display = "none";
+			} else {
+				recipeCards[i].style.display = "";
+			}
+		}
+	}
+})
+
+//add item function for dropdown options
 let addItem = (array, parentElm) => {
 	array.forEach(item => {
 		let option = create("li", {class: "dropdown-item"});
@@ -237,23 +256,21 @@ document.addEventListener("click", function(e) {
 	} else if (e.target.matches("#utensil-search")) {
 		autocomplete(document.getElementById("utensil-search"), utensilsOptions, 0);
 		removeClass(dropDownOptions, "show-opts");
+	} else if (e.target.matches(".dropdown-item")) {
+		createTag(e.target);
+		e.target.parentNode.previousElementSibling.removeAttribute("style");
+		e.target.parentNode.previousElementSibling.innerHTML = e.target.parentNode.previousElementSibling.getAttribute("data-val") + "<span class='fas fa-chevron-down'></span>";
+		removeClass(dropDownOptions, "show-opts");
 	}
 })
 
-let launchSearch = document.getElementById("launch-search");
-//click on search
-launchSearch.addEventListener("click", function() {
-	if (searchInput.value.length > 0) {
-		let input = searchInput.value.toLowerCase();
+//create selected tag button
+let createTag = (target) => {
+	let selectedTag = create("button", {class: "btn selected-tag-btn"});
+	selectedTag.innerHTML = target.textContent + "<span class='fas fa-times ml-2'></i>";
+	let computedStyle = getComputedStyle(target.parentElement);
+	selectedTag.style.backgroundColor = computedStyle.getPropertyValue("background-color");
+	//put to DOM
+	document.getElementById("selected-tags").appendChild(selectedTag);
+}
 
-		let recipeCards = Array.from(document.getElementsByClassName("recipe-card"));
-
-		for (let i = 0; i< recipeCards.length; i++) {
-			if (!recipeCards[i].innerHTML.toLowerCase().includes(input)) {
-				recipeCards[i].style.display = "none";
-			} else {
-				recipeCards[i].style.display = "";
-			}
-		}
-	}
-})
