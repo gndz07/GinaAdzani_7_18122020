@@ -177,10 +177,8 @@ let searchInput = document.getElementById("search-input");
 //implement the function on key press
 autocomplete(searchInput, searchOptions, 2);
 
-//search the DOM content
-let launchSearch = document.getElementById("launch-search");
-//click on search
-launchSearch.addEventListener("click", function() {
+//click on search icon
+document.getElementById("launch-search").addEventListener("click", function() {
 	if (searchInput.value.length > 0) {
 		let input = searchInput.value.toLowerCase();
 
@@ -190,7 +188,7 @@ launchSearch.addEventListener("click", function() {
 			if (!recipeCards[i].innerHTML.toLowerCase().includes(input)) {
 				recipeCards[i].style.display = "none";
 			} else {
-				recipeCards[i].style.display = "";
+				recipeCards[i].removeAttribute("style");
 			}
 		}
 	}
@@ -258,9 +256,13 @@ document.addEventListener("click", function(e) {
 		removeClass(dropDownOptions, "show-opts");
 	} else if (e.target.matches(".dropdown-item")) {
 		createTag(e.target);
+		filterByTag(e.target);
 		e.target.parentNode.previousElementSibling.removeAttribute("style");
 		e.target.parentNode.previousElementSibling.innerHTML = e.target.parentNode.previousElementSibling.getAttribute("data-val") + "<span class='fas fa-chevron-down'></span>";
 		removeClass(dropDownOptions, "show-opts");
+	} else if (e.target.matches(".fa-times")) {
+		document.getElementById("selected-tags").removeChild(e.target.parentElement);
+		console.log(e.target.parentElement.textContent);
 	}
 })
 
@@ -272,5 +274,32 @@ let createTag = (target) => {
 	selectedTag.style.backgroundColor = computedStyle.getPropertyValue("background-color");
 	//put to DOM
 	document.getElementById("selected-tags").appendChild(selectedTag);
+}
+//function to filter by tag
+let filterByTag = (tag) => {
+	let recipeCards = Array.from(document.getElementsByClassName("recipe-card"));
+	let input = tag.textContent.toLowerCase();
+
+	for (let i = 0; i<recipeCards.length; i++) {
+		if (!recipeCards[i].hasAttribute("style")) {
+			if (!recipeCards[i].innerHTML.toLowerCase().includes(input)) {
+				recipeCards[i].style.display = "none";
+			} else {
+				recipeCards[i].removeAttribute("style");
+			}
+		}
+	}
+}
+//function to unfilter
+let unfilterTag = (tag) => {
+	let recipeCards = Array.from(document.getElementsByClassName("recipe-card"));
+	let input = tag.textContent.toLowerCase();
+	for (let i = 0; i<recipeCards.length; i++) {
+		if (recipeCards[i].hasAttribute("style")) {
+			if (recipeCards[i].innerHTML.toLowerCase().includes(input)) {
+				recipeCards[i].removeAttribute("style");
+			}
+		}
+	}
 }
 
