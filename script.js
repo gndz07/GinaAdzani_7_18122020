@@ -47,21 +47,29 @@ recipesArray.forEach(recipe => {
 	let method = create("p", {class: "w-50"});
 	method.textContent = recipe[1].description;
 
+	//appliance section
+	let appliances = create("p", {class: "sr-only"});
+	appliances.textContent = recipe[1].appliance;
+	//utensils section
+	let utensils = create("div", {class: "sr-only"});
+	let eachUtensils = recipe[1].ustensils.map(function(utensil) {
+		return "<p>" + utensil + "</p>";
+	}).join("");
+	utensils.innerHTML = eachUtensils;
+	
+
 	//card body
 	let cardBody = create("div", {class: "card-body d-flex justify-content-between card-content"});
 	//combine in card body
 	cardBody.appendChild(ingredients);
 	cardBody.appendChild(method);
-
+	cardBody.appendChild(appliances);
+	cardBody.appendChild(utensils);
 
 	//card container
 	let cardContainer = create("article", {class: "card recipe-card pb-3 mb-5"});
 
-	//container parent
-	//let containerParent = create("div", {class: "mb-5"});
-
 	//combine to DOM
-	//containerParent.appendChild(cardContainer);
 	cardContainer.appendChild(image);
 	cardContainer.appendChild(headerParent);
 	cardContainer.appendChild(cardBody);
@@ -216,7 +224,7 @@ addItem(utensilsOptions, document.getElementById("utensils-dropdown"));
 let openDropdown = (btn, placeholder, id) => {
 	btn.addEventListener("click", function() {
 		if (!btn.hasAttribute("style")) {
-			removeClass(dropDownOptions, "show-opts");
+			//removeClass(dropDownOptions, "show-opts");
 			btn.style.width = "400px";
 			btn.innerHTML = "<input type='text' class='tag-search'" + placeholder + id + "class='tag-search-bar'><span class='fas fa-chevron-up'></span>";
 			btn.nextElementSibling.classList.add("show-opts");
