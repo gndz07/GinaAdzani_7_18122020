@@ -3,6 +3,11 @@ input[type="text"] {
 	border-color: transparent;
 }
 
+#search-input, #launch-search {
+	background-color: #e7e7e7;
+	border: none;
+}
+
 .card-img-placeholder {
 	background-color: #c9bdbd;
 	min-height: 200px;
@@ -38,9 +43,17 @@ input[type="text"] {
 	color: white;
 }
 
+.btn.bg-green:hover {
+	background-color: #00a881;
+}
+
 .bg-orange {
 	background-color: #ff5a47;
 	color: white;
+}
+
+.btn.bg-orange:hover {
+	background-color: #ff2c14;
 }
 
 .autocomplete-items {
@@ -108,6 +121,7 @@ input[type="text"] {
 
 .dropdown-item {
 	color: white;
+	cursor: pointer;
 }
 
 .dropdown-menu.show {
@@ -116,8 +130,11 @@ input[type="text"] {
 	max-height: 400px;
 }
 
-
 .selected-tag-btn {
 	color: white;
 	margin-right: 1rem;
+}
+
+.btn:hover {
+	color: white;
 }

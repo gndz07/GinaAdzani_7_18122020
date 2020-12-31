@@ -221,10 +221,22 @@ let utensilsOptions = [...new Set(recipesArray.map(a => a[1].ustensils).flat())]
 //put utensils options into dropdown
 addItem(utensilsOptions, document.getElementById("utensils-dropdown"));
 
+//function to get computed style of an element
+function getStyle(el, name) {
+	if (document.defaultView && document.defaultView.getComputedStyle) {
+		let style = document.defaultView.getComputedStyle(el, null);
+		if (style)
+			return style[name];
+	}
+	//for IE
+	else if(el.currentStyle)
+		return el.currentStyle[name];
+}
+//function on tag buttons
 let openDropdown = (btn, placeholder, id) => {
 	btn.addEventListener("click", function() {
-		if (!btn.hasAttribute("style")) {
-			//removeClass(dropDownOptions, "show-opts");
+		if (getStyle(btn, "style") != "none") {
+			removeClass(dropDownOptions, "show-opts");
 			btn.style.width = "400px";
 			btn.innerHTML = "<input type='text' class='tag-search'" + placeholder + id + "class='tag-search-bar'><span class='fas fa-chevron-up'></span>";
 			btn.nextElementSibling.classList.add("show-opts");
@@ -270,7 +282,7 @@ document.addEventListener("click", function(e) {
 		removeClass(dropDownOptions, "show-opts");
 	} else if (e.target.matches(".fa-times")) {
 		document.getElementById("selected-tags").removeChild(e.target.parentElement);
-		console.log(e.target.parentElement.textContent);
+		unfilterTag(e.target.parentElement);
 	}
 })
 
@@ -303,10 +315,8 @@ let unfilterTag = (tag) => {
 	let recipeCards = Array.from(document.getElementsByClassName("recipe-card"));
 	let input = tag.textContent.toLowerCase();
 	for (let i = 0; i<recipeCards.length; i++) {
-		if (recipeCards[i].hasAttribute("style")) {
-			if (recipeCards[i].innerHTML.toLowerCase().includes(input)) {
+		if (recipeCards[i].hasAttribute("style") && !recipeCards[i].innerHTML.toLowerCase().includes(input)) {
 				recipeCards[i].removeAttribute("style");
-			}
 		}
 	}
 }
