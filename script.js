@@ -205,6 +205,9 @@ searchInput.addEventListener("keyup", function(e) {
 				createCard(recipesArray[i]);
 			}
 		}
+		if (!mainSection.hasChildNodes()) {
+			mainSection.textContent = "No recipe found";
+		}
 	} else {
 		removeAllChildren(cardElm, mainSection);
 		recipesArray.forEach(recipe => createCard(recipe));
@@ -260,16 +263,15 @@ let tagSearch = (input, options) => {
 		}
 	})
 }
-//array of all options
-let tagOptions = Array.from(document.getElementsByClassName("dropdown-item"));
-//implement the function on each tag input
-Array.from(document.getElementsByClassName("tag-search-input")).forEach(input => tagSearch(input, tagOptions));
-
+//ingredients dropdown
+tagSearch(document.getElementById("ingredients-tag-input"), Array.from(document.querySelectorAll("#ingredients-dropdown .dropdown-item")));
+tagSearch(document.getElementById("appliances-tag-input"), Array.from(document.querySelectorAll("#appliances-dropdown .dropdown-item")));
+tagSearch(document.getElementById("utensils-tag-input"), Array.from(document.querySelectorAll("#utensils-dropdown .dropdown-item")));
 //create selected tag button
 let createTag = (target) => {
 	let selectedTag = create("button", {class: "btn selected-tag-btn"});
 	selectedTag.innerHTML = target.textContent + "<span class='fas fa-times ml-2'></i>";
-	let computedStyle = getComputedStyle(target.parentElement);
+	let computedStyle = getComputedStyle(target.parentNode.parentElement);
 	selectedTag.style.backgroundColor = computedStyle.getPropertyValue("background-color");
 	//put to DOM
 	document.getElementById("selected-tags").appendChild(selectedTag);
@@ -288,7 +290,7 @@ let filterByTag = (tag) => {
 		}
 	}
 }
-//function to unfilter, NOT WORKING WELL YET
+//function to unfilter, NOT SURE WORKING PERFECTLY YET
 let unfilterTag = (tag) => {
 	let recipeCards = Array.from(document.getElementsByClassName("recipe-card"));
 	let input = tag.textContent.toLowerCase();
@@ -303,9 +305,7 @@ document.addEventListener("click", function(e) {
 	if (e.target.matches(".dropdown-item")) { //selecting tag filter
 		createTag(e.target);
 		filterByTag(e.target);
-		e.target.parentElement.classList.remove("show-opts");
-		e.target.parentNode.previousElementSibling.classList.remove("show");
-		e.target.parentNode.previousElementSibling.previousElementSibling.removeAttribute("style");
+		closeAllDropdowns();
 	} else if (e.target.matches(".fa-times")) {
 		document.getElementById("selected-tags").removeChild(e.target.parentElement);
 		unfilterTag(e.target.parentElement);
@@ -316,7 +316,7 @@ document.addEventListener("click", function(e) {
 let closeAllDropdowns = () => {
 	Array.from(document.getElementsByClassName("tag-btn")).forEach(btn => {btn.removeAttribute("style")});
 	Array.from(document.getElementsByClassName("tag-search")).forEach(item => {item.classList.remove("show")});
-	Array.from(document.getElementsByClassName("dropdown-choices")).forEach(item => {item.classList.remove("show-opts")});
+	Array.from(document.getElementsByClassName("container-tag-options")).forEach(item => {item.classList.remove("show-opts")});
 }
 //closs by clicking on arrow up
 Array.from(document.getElementsByClassName("fa-chevron-up")).forEach(item => {
