@@ -12,7 +12,7 @@ const create = (elm, attributes) => {
 	return element;
 }
 
-let createCard = (recipe) => {
+recipesArray.forEach(recipe => {
 	//image
 	let image = create("div", {class: "card-img-top card-img-placeholder", alt: "card-image"});
 	//title
@@ -77,9 +77,8 @@ let createCard = (recipe) => {
 	let mainSection = document.getElementById("main");
 	//put into DOM
 	mainSection.appendChild(cardContainer);
-}
+})
 
-recipesArray.forEach(recipe => createCard(recipe));
 //function to split
 let splitString = (array) => {
 	let newArr = [];
@@ -88,6 +87,7 @@ let splitString = (array) => {
 	}
 	return newArr;
 }
+
 //extract all unique ingredients into one array
 let ingredientsOptions = [...new Set(recipesArray.map(a => a[1].ingredients.map(b => b.ingredient.toLowerCase())).flat())];
 //words from ingredients options
@@ -185,33 +185,26 @@ let searchInput = document.getElementById("search-input");
 //implement the function on key press
 autocomplete(searchInput, searchOptions, 2);
 
-//function to clean all child
-let removeAllChildren = (children, parent) => {
-	children.forEach(child => {
-		parent.removeChild(child);
-	})
-}
 //click on search icon
 searchInput.addEventListener("keyup", function(e) {
-	let mainSection = document.getElementById("main");
-	let cardElm = Array.from(document.getElementsByClassName("recipe-card"));
-	if (searchInput.value.length > 2) {
-		let input = e.target.value.toLowerCase();
-		removeAllChildren(cardElm, mainSection);
-		for (let i=0; i<recipesArray.length; i++) {
-			if (recipesArray[i][1].name.toLowerCase().includes(input) ||
-				recipesArray[i][1].description.toLowerCase().includes(input) ||
-				Object.values(recipesArray[i][1].ingredients).indexOf(input) > -1) {
-				createCard(recipesArray[i]);
+	let recipeCards = Array.from(document.getElementsByClassName("recipe-card"));
+	if (e.target.value.length > 2) {
+		let input = searchInput.value.toLowerCase();
+
+		for (let i = 0; i< recipeCards.length; i++) {
+			if (!recipeCards[i].innerHTML.toLowerCase().includes(input)) {
+				recipeCards[i].style.display = "none";
+			} else {
+				recipeCards[i].removeAttribute("style");
 			}
 		}
 	} else {
-		removeAllChildren(cardElm, mainSection);
-		recipesArray.forEach(recipe => createCard(recipe));
-	}	
+		recipeCards.forEach(recipe => {
+			recipe.removeAttribute("style");
+		})
+	}
 })
 
-//tag filtering functions
 //add item function for dropdown options
 let addItem = (array, parentElm) => {
 	array.forEach(item => {
@@ -231,39 +224,77 @@ let utensilsOptions = [...new Set(recipesArray.map(a => a[1].ustensils).flat())]
 //put utensils options into dropdown
 addItem(utensilsOptions, document.getElementById("utensils-dropdown"));
 
-//function to open dropdown
-let openDropdown = (btn) => {
-	btn.addEventListener("click", function(e) {
-		if (!btn.hasAttribute("style")) {
-			closeAllDropdowns();
-			btn.nextElementSibling.classList.add("show");
-			btn.nextElementSibling.nextElementSibling.classList.add("show-opts");
-			btn.style.display = "none";
-		} else {
-			btn.removeAttribute("style");
-			btn.nextElementSibling.classList.remove("show");
-		}
-	})
-}
-//implement the function
-Array.from(document.getElementsByClassName("tag-btn")).forEach(btn => openDropdown(btn));
+/*
+//function to get computed style of an element
+function getStyle(el, name) {
+	if (document.defaultView && document.defaultView.getComputedStyle) {
+		let style = document.defaultView.getComputedStyle(el, null);
+		if (style)
+			return style[name];
+	}
+	//for IE
+	else if(el.currentStyle)
+		return el.currentStyle[name];
+}*/ //for unknown reason, it doesn't work if I get the computed style?
 
-//search function on tag buttons
-let tagSearch = (input, options) => {
-	input.addEventListener("input", function(e) {
-		for (let i=0; i<options.length; i++) {
-			if (options[i].textContent.substr(0, e.target.value.length).toLowerCase() != e.target.value.toLowerCase()) {
-				options[i].style.display = "none";
-			} else {
-				options[i].removeAttribute("style");
-			}
-		}
+//function on tag buttons
+let openDropdown = (btn, placeholder, id) => {
+	btn.addEventListener("click", function() {
+		if (!btn.hasAttribute("style")) {
+			removeClass(dropDownOptions, "show-opts");
+			btn.style.width = "400px";
+			btn.innerHTML = "<input type='text' class='tag-search'" + placeholder + id + "class='tag-search-bar'><span class='fas fa-chevron-up'></span>";
+			btn.nextElementSibling.classList.add("show-opts");
+		} 
 	})
 }
-//array of all options
-let tagOptions = Array.from(document.getElementsByClassName("dropdown-item"));
-//implement the function on each tag input
-Array.from(document.getElementsByClassName("tag-search-input")).forEach(input => tagSearch(input, tagOptions));
+let removeClass = (array, className) => {
+	array.forEach(item => {
+		item.classList.remove(className);
+	})
+}
+let removeAttr = (array, attr) => {
+	array.forEach(item => {
+		item.removeAttribute(attr);
+	})
+}
+//implement function to each button
+openDropdown(document.getElementById("ingredients-tag-btn"), "placeholder='Rechercher un ingrédient...'", "id='ingredient-search'");
+openDropdown(document.getElementById("appliances-tag-btn"), "placeholder='Rechercher un appareil...'", "id='appliance-search'");
+openDropdown(document.getElementById("utensils-tag-btn"), "placeholder='Rechercher un ustensil...'", "id='utensil-search'");
+
+
+let dropDownOptions = Array.from(document.getElementsByClassName("dropdown-options"));
+
+document.addEventListener("click", function(e) {
+	if (e.target.matches(".fa-chevron-up")) {
+		e.target.parentElement.removeAttribute("style");
+		e.target.parentElement.innerHTML = e.target.parentElement.getAttribute("data-val") + "<span class='fas fa-chevron-down'></span>";
+		removeClass(dropDownOptions, "show-opts");
+	}
+})
+
+document.addEventListener("click", function(e) {
+	if (e.target.matches("#ingredient-search")) {
+		autocomplete(document.getElementById("ingredient-search"), ingredientsOptions, 0);
+		removeClass(dropDownOptions, "show-opts");
+	} else if (e.target.matches("#appliance-search")) {
+		autocomplete(document.getElementById("appliance-search"), appliancesOptions, 0);
+		removeClass(dropDownOptions, "show-opts");
+	} else if (e.target.matches("#utensil-search")) {
+		autocomplete(document.getElementById("utensil-search"), utensilsOptions, 0);
+		removeClass(dropDownOptions, "show-opts");
+	} else if (e.target.matches(".dropdown-item")) {
+		createTag(e.target);
+		filterByTag(e.target);
+		e.target.parentNode.previousElementSibling.removeAttribute("style");
+		e.target.parentNode.previousElementSibling.innerHTML = e.target.parentNode.previousElementSibling.getAttribute("data-val") + "<span class='fas fa-chevron-down'></span>";
+		removeClass(dropDownOptions, "show-opts");
+	} else if (e.target.matches(".fa-times")) {
+		document.getElementById("selected-tags").removeChild(e.target.parentElement);
+		unfilterTag(e.target.parentElement);
+	}
+})
 
 //create selected tag button
 let createTag = (target) => {
@@ -278,6 +309,7 @@ let createTag = (target) => {
 let filterByTag = (tag) => {
 	let recipeCards = Array.from(document.getElementsByClassName("recipe-card"));
 	let input = tag.textContent.toLowerCase();
+
 	for (let i = 0; i<recipeCards.length; i++) {
 		if (!recipeCards[i].hasAttribute("style")) {
 			if (!recipeCards[i].innerHTML.toLowerCase().includes(input)) {
@@ -288,7 +320,7 @@ let filterByTag = (tag) => {
 		}
 	}
 }
-//function to unfilter, NOT WORKING WELL YET
+//function to unfilter
 let unfilterTag = (tag) => {
 	let recipeCards = Array.from(document.getElementsByClassName("recipe-card"));
 	let input = tag.textContent.toLowerCase();
@@ -299,28 +331,3 @@ let unfilterTag = (tag) => {
 	}
 }
 
-document.addEventListener("click", function(e) {
-	if (e.target.matches(".dropdown-item")) { //selecting tag filter
-		createTag(e.target);
-		filterByTag(e.target);
-		e.target.parentElement.classList.remove("show-opts");
-		e.target.parentNode.previousElementSibling.classList.remove("show");
-		e.target.parentNode.previousElementSibling.previousElementSibling.removeAttribute("style");
-	} else if (e.target.matches(".fa-times")) {
-		document.getElementById("selected-tags").removeChild(e.target.parentElement);
-		unfilterTag(e.target.parentElement);
-	}
-})
-
-//function to close all dropdowns
-let closeAllDropdowns = () => {
-	Array.from(document.getElementsByClassName("tag-btn")).forEach(btn => {btn.removeAttribute("style")});
-	Array.from(document.getElementsByClassName("tag-search")).forEach(item => {item.classList.remove("show")});
-	Array.from(document.getElementsByClassName("dropdown-choices")).forEach(item => {item.classList.remove("show-opts")});
-}
-//closs by clicking on arrow up
-Array.from(document.getElementsByClassName("fa-chevron-up")).forEach(item => {
-	item.addEventListener("click", function() {
-		closeAllDropdowns();
-	});
-})
