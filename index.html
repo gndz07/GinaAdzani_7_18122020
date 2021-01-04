@@ -17,53 +17,71 @@
 		<div class="row">
 			<nav class="col navbar navbar-expand">
 				<a class="navbar-brand mx-auto d-block mt-4" href="index.html">
-					<img src="logo_lespetitsplats.png" width="300px" alt="Les Petits Plats Homepage">
+					<img src="logo_lespetitsplats.png" width="300" alt="Les Petits Plats Homepage">
 				</a>
-			</div>
+			</nav>
 		</div>
 
 
 		<div class="row">
 			<div class="col input-group input-group-lg mx-5" id="autocomplete">
-				<input class="form-control bg-light" id="search-input" type="text" name="search-input" placeholder="Rechercher un ingrédient, appareil, ustensils ou une recette">
+				<input class="form-control" id="search-input" type="text" name="search-input" placeholder="Rechercher un ingrédient, appareil, ustensils ou une recette">
 				<div class="input-group-append">
-					<span class="input-group-text">
+					<span id="launch-search" class="input-group-text">
 						<i class="fas fa-search"></i>
 					</span>
 				</div>
 			</div>
 		</div>
 
-		<div id="selected-tags">
+		<div id="selected-tags" class="mx-5 mt-3">
 			
 		</div>
 
 		<div class="btn-group ml-5 my-4">
-     		<div class="dropdown-container">
-     			<button id="ingredients-tag-btn" class="btn btn-primary btn-lg mx-2 tag-btn" type="button" data-val="Ingrédient">Ingrédients
+     		<div class="dropdown-parent">
+     			<button id="ingredients-tag-btn" class="btn btn-primary btn-lg mx-2 tag-btn show" type="button">Ingrédients
      				<span class="fas fa-chevron-down"></span>
      			</button>
-     			<ul class="dropdown-options bg-primary" id="ingredients-dropdown">
+     			<button id="ingredients-search" class="btn btn-primary tag-search">
+     				<input id="ingredients-tag-input" class="form-control bg-primary tag-search-input" type="text" name="search-ingredient" placeholder="Rechercher un ingrédient">
+     				<span class="fas fa-chevron-up mr-2 align-self-center"></span>
+     			</button>
+     			<div class="container-tag-options bg-primary">
+     				<ul class="dropdown-choices" id="ingredients-dropdown">
      				
-     			</ul>
+     				</ul>
+     			</div>
      		</div>
 
-   			<div class="dropdown-container">
-     			<button id="appliances-tag-btn" class="btn bg-green btn-lg mx-2 tag-btn" type="button" data-val="Appareil">Appareils
+   			<div class="dropdown-parent">
+     			<button id="appliances-tag-btn" class="btn bg-green btn-lg mx-2 tag-btn show" type="button">Appareils
      				<span class="fas fa-chevron-down"></span>
      			</button>
-     			<ul class="dropdown-options bg-green" id="appliances-dropdown">
+     			<button id="appliances-search" class="btn bg-green tag-search">
+     				<input id="appliances-tag-input" class="form-control bg-green tag-search-input" type="text" name="search-appliance" placeholder="Rechercher un appareil">
+     				<span class="fas fa-chevron-up mr-2 align-self-center"></span>
+     			</button>
+     			<div class="container-tag-options bg-green">
+     				<ul class="dropdown-choices bg-green" id="appliances-dropdown">
      			
-     			</ul>
+     				</ul>
+     			</div>
      		</div>
 
-     		<div class="dropdown-container">
-     			<button id="utensils-tag-btn" class="btn bg-orange btn-lg mx-2 tag-btn" type="button" data-val="Ustensil">Ustensils
+     		<div class="dropdown-parent">
+     			<button id="utensils-tag-btn" class="btn bg-orange btn-lg mx-2 tag-btn show" type="button">Ustensils
      				<span class="fas fa-chevron-down"></span>
      			</button>
-     			<ul class="dropdown-options bg-orange" id="utensils-dropdown">
+     			<button id="utensils-search" class="btn bg-orange tag-search">
+     				<input id="utensils-tag-input" class="form-control bg-orange tag-search-input" type="text" name="search-utensil" placeholder="Rechercher un ustensil">
+     				<span class="fas fa-chevron-up mr-2 align-self-center"></span>
+     			</button>
+     			<div class="container-tag-options bg-orange">
+     				<ul class="dropdown-choices bg-orange" id="utensils-dropdown">
      			
-     			</ul>
+     				</ul>
+     			</div>
      		</div>
   		</div>
 
@@ -72,15 +90,8 @@
   
   			</div>
   		</div>
-
-				
-			</div>
 			
 		</div>
-
-
-	</div>
-
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

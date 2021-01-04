@@ -3,6 +3,11 @@ input[type="text"] {
 	border-color: transparent;
 }
 
+#search-input, #launch-search {
+	background-color: #e7e7e7;
+	border: none;
+}
+
 .card-img-placeholder {
 	background-color: #c9bdbd;
 	min-height: 200px;
@@ -33,14 +38,22 @@ input[type="text"] {
 	font-weight: 500;
 }
 
-.bg-green {
+.bg-green, .bg-green input[type="text"] {
 	background-color: #00dca9;
 	color: white;
 }
 
-.bg-orange {
+.btn.bg-green:hover {
+	background-color: #00a881;
+}
+
+.bg-orange, .bg-orange input[type="text"] {
 	background-color: #ff5a47;
 	color: white;
+}
+
+.btn.bg-orange:hover {
+	background-color: #ff2c14;
 }
 
 .autocomplete-items {
@@ -50,10 +63,6 @@ input[type="text"] {
 	left: 20px;
 	background-color: white;
 	width: 100%;
-	padding-left: .5rem;
-	text-align: left;
-	font-weight: 400;
-	font-size: 1rem;
 }
 
 .autocomplete-items p:hover {
@@ -65,25 +74,22 @@ input[type="text"] {
 	background-color: #c9bdbd;
 }
 
-.dropdown-container {
+.dropdown-parent {
 	position: relative;
 }
 
-.dropdown-options {
+.dropdown-choices {
 	display: none;
 }
 
-.dropdown-options.show-opts {
-	position: absolute;
-	top: 100%;
-	left: 10px;
-	max-height: 400px;
-	z-index: 999;
+.show-opts .dropdown-choices {
 	display: flex;
 	flex-flow: column wrap;
-	padding: .5rem;
-	margin: .125rem 0 0;
-	border-radius: .25rem;
+	z-index: 3;
+	height: inherit;
+	overflow: hidden;
+	padding-left: 0;
+	margin-top: -0.5rem;
 }
 
 .fa-chevron-down {
@@ -97,33 +103,63 @@ input[type="text"] {
 	color: white;
 }
 .tag-search {
-	background-color: transparent;
-	border: none;
-	width: 90%;
+	display: none;
+	width: 600px;
 }
 
-.tag-search::placeholder {
+.tag-search input[type="text"] {
 	color: white;
 }
 
-#ingredient-search-autocomplete-lists {
+#ingredient-tag-input-autocomplete-lists {
 	background-color: #007bff;
-}
-
-#appliance-search-autocomplete-lists {
-	background-color: #00dca9;
-}
-
-#utensil-search-autocomplete-lists {
-	background-color: #ff5a47;
 }
 
 .dropdown-item {
 	color: white;
+	cursor: pointer;
+	width: 33%;
 }
 
-.dropdown-menu.show {
+.selected-tag-btn {
+	color: white;
+	margin-right: 1rem;
+}
+
+.btn:hover {
+	color: white;
+}
+
+.show {
+	display: block;
+}
+
+.tag-search.show {
 	display: flex;
-	flex-flow: column wrap;
-	max-height: 400px;
+	justify-content: space-around;
+}
+
+.tag-search-input {
+	font-size: 1.2rem;
+}
+
+
+.tag-search-input::placeholder {
+	color: white;
+}
+
+.container-tag-options {
+	display: none;
+}
+.container-tag-options.show-opts {
+	min-height: min-content;
+	height: 400px;
+	width: 600px;
+	display: block;
+	border-radius: .25rem;
+	position: absolute;
+	top: 93%;
+	z-index: 2;
+	padding: .5rem;
+	margin: .125rem 0 0;
 }

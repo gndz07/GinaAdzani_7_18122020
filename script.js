@@ -265,7 +265,8 @@ let autocomplete = (input, arr, minLength) => {
 //implement the function on key press
 autocomplete(document.getElementById("search-input"), searchOptions, 2);
 
-//add item to dropdown function
+//tag filtering functions
+//add item function for dropdown options
 let addItem = (array, parentElm) => {
 	array.forEach(item => {
 		let option = create("li", {class: "dropdown-item"});
@@ -284,45 +285,93 @@ let utensilsOptions = [...new Set(recipesArray.map(a => a[1].ustensils).flat())]
 //put utensils options into dropdown
 addItem(utensilsOptions, document.getElementById("utensils-dropdown"));
 
-let openDropdown = (btn, placeholder, id) => {
-	btn.addEventListener("click", function() {
+//function to open dropdown
+let openDropdown = (btn) => {
+	btn.addEventListener("click", function(e) {
 		if (!btn.hasAttribute("style")) {
-			btn.style.width = "400px";
-			btn.innerHTML = "<input type='text' class='tag-search'" + placeholder + id + "class='tag-search-bar'><span class='fas fa-chevron-up'></span>";
-			btn.nextElementSibling.classList.add("show-opts");
-		} 
+			closeAllDropdowns();
+			btn.nextElementSibling.classList.add("show");
+			btn.nextElementSibling.nextElementSibling.classList.add("show-opts");
+			btn.style.display = "none";
+		} else {
+			btn.removeAttribute("style");
+			btn.nextElementSibling.classList.remove("show");
+		}
 	})
 }
-let removeClass = (array, className) => {
-	array.forEach(item => {
-		item.classList.remove(className);
+//implement the function
+Array.from(document.getElementsByClassName("tag-btn")).forEach(btn => openDropdown(btn));
+
+//search function on tag buttons
+let tagSearch = (input, options) => {
+	input.addEventListener("input", function(e) {
+		for (let i=0; i<options.length; i++) {
+			if (options[i].textContent.substr(0, e.target.value.length).toLowerCase() != e.target.value.toLowerCase()) {
+				options[i].style.display = "none";
+			} else {
+				options[i].removeAttribute("style");
+			}
+		}
 	})
 }
-//implement function to each button
-openDropdown(document.getElementById("ingredients-tag-btn"), "placeholder='Rechercher un ingrédient...'", "id='ingredient-search'");
-openDropdown(document.getElementById("appliances-tag-btn"), "placeholder='Rechercher un appareil...'", "id='appliance-search'");
-openDropdown(document.getElementById("utensils-tag-btn"), "placeholder='Rechercher un ustensil...'", "id='utensil-search'");
-
-
-let dropDownOptions = Array.from(document.getElementsByClassName("dropdown-options"));
+//ingredients dropdown
+tagSearch(document.getElementById("ingredients-tag-input"), Array.from(document.querySelectorAll("#ingredients-dropdown .dropdown-item")));
+tagSearch(document.getElementById("appliances-tag-input"), Array.from(document.querySelectorAll("#appliances-dropdown .dropdown-item")));
+tagSearch(document.getElementById("utensils-tag-input"), Array.from(document.querySelectorAll("#utensils-dropdown .dropdown-item")));
+//create selected tag button
+let createTag = (target) => {
+	let selectedTag = create("button", {class: "btn selected-tag-btn"});
+	selectedTag.innerHTML = target.textContent + "<span class='fas fa-times ml-2'></i>";
+	let computedStyle = getComputedStyle(target.parentNode.parentElement);
+	selectedTag.style.backgroundColor = computedStyle.getPropertyValue("background-color");
+	//put to DOM
+	document.getElementById("selected-tags").appendChild(selectedTag);
+}
+//function to filter by tag
+let filterByTag = (tag) => {
+	let recipeCards = Array.from(document.getElementsByClassName("recipe-card"));
+	let input = tag.textContent.toLowerCase();
+	for (let i = 0; i<recipeCards.length; i++) {
+		if (!recipeCards[i].hasAttribute("style")) {
+			if (!recipeCards[i].innerHTML.toLowerCase().includes(input)) {
+				recipeCards[i].style.display = "none";
+			} else {
+				recipeCards[i].removeAttribute("style");
+			}
+		}
+	}
+}
+//function to unfilter, NOT SURE WORKING PERFECTLY YET
+let unfilterTag = (tag) => {
+	let recipeCards = Array.from(document.getElementsByClassName("recipe-card"));
+	let input = tag.textContent.toLowerCase();
+	for (let i = 0; i<recipeCards.length; i++) {
+		if (recipeCards[i].hasAttribute("style") && !recipeCards[i].innerHTML.toLowerCase().includes(input)) {
+				recipeCards[i].removeAttribute("style");
+		}
+	}
+}
 
 document.addEventListener("click", function(e) {
-	if (e.target.matches(".fa-chevron-up")) {
-		e.target.parentElement.removeAttribute("style");
-		e.target.parentElement.innerHTML = e.target.parentElement.getAttribute("data-val") + "<span class='fas fa-chevron-down'></span>";
-		removeClass(dropDownOptions, "show-opts");
+	if (e.target.matches(".dropdown-item")) { //selecting tag filter
+		createTag(e.target);
+		filterByTag(e.target);
+		closeAllDropdowns();
+	} else if (e.target.matches(".fa-times")) {
+		document.getElementById("selected-tags").removeChild(e.target.parentElement);
+		unfilterTag(e.target.parentElement);
 	}
 })
 
-document.addEventListener("click", function(e) {
-	if (e.target.matches("#ingredient-search")) {
-		autocomplete(document.getElementById("ingredient-search"), ingredientsOptions, 0);
-		removeClass(dropDownOptions, "show-opts");
-	} else if (e.target.matches("#appliance-search")) {
-		autocomplete(document.getElementById("appliance-search"), appliancesOptions, 0);
-		removeClass(dropDownOptions, "show-opts");
-	} else if (e.target.matches("#utensil-search")) {
-		autocomplete(document.getElementById("utensil-search"), utensilsOptions, 0);
-		removeClass(dropDownOptions, "show-opts");
-	}
+//function to close all dropdowns
+let closeAllDropdowns = () => {
+	Array.from(document.getElementsByClassName("tag-btn")).forEach(btn => {btn.removeAttribute("style")});
+	Array.from(document.getElementsByClassName("tag-search")).forEach(item => {item.classList.remove("show")});
+	Array.from(document.getElementsByClassName("container-tag-options")).forEach(item => {item.classList.remove("show-opts")});
+}
+//closs by clicking on arrow up
+Array.from(document.getElementsByClassName("fa-chevron-up")).forEach(item => {
+	item.addEventListener("click", function() {
+		closeAllDropdowns();
+	});
 })
