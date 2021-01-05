@@ -12,7 +12,7 @@ const create = (elm, attributes) => {
 	return element;
 }
 
-recipesArray.forEach(recipe => {
+let createCard = (recipe) => {
 	//image
 	let image = create("div", {class: "card-img-top card-img-placeholder", alt: "card-image"});
 	//title
@@ -47,12 +47,24 @@ recipesArray.forEach(recipe => {
 	let method = create("p", {class: "w-50"});
 	method.textContent = recipe[1].description;
 
+	//appliance section
+	let appliances = create("p", {class: "sr-only"});
+	appliances.textContent = recipe[1].appliance;
+	//utensils section
+	let utensils = create("div", {class: "sr-only"});
+	let eachUtensils = recipe[1].ustensils.map(function(utensil) {
+		return "<p>" + utensil + "</p>";
+	}).join("");
+	utensils.innerHTML = eachUtensils;
+	
+
 	//card body
 	let cardBody = create("div", {class: "card-body d-flex justify-content-between card-content"});
 	//combine in card body
 	cardBody.appendChild(ingredients);
 	cardBody.appendChild(method);
-
+	cardBody.appendChild(appliances);
+	cardBody.appendChild(utensils);
 
 	//card container
 	let cardContainer = create("article", {class: "card recipe-card pb-3 mb-5"});
@@ -65,7 +77,9 @@ recipesArray.forEach(recipe => {
 	let mainSection = document.getElementById("main");
 	//put into DOM
 	mainSection.appendChild(cardContainer);
-})
+}
+
+recipesArray.forEach(recipe => createCard(recipe));
 
 //token tree creation function
 let tokenTree = function (tokenArray) {
@@ -166,19 +180,79 @@ let splitString = (array) => {
 	}
 	return newArr;
 }
+//function sets to extract and sort all keywords
+//sorting functions
+let quickSort = (array, left, right) => {
+	let index;
+	if (array.length > 1) {
+       	index = partition(array, left, right); //take index from partition
+       	if (left<index-1) { //more elements on the left
+       		quickSort(array, left, index-1);
+       	}
+       	if (index<right) { //more elements on the right
+       		quickSort(array, index, right);
+       	}
+	}
+	return array;
+}
+//partition code, to make a left and right elements list
+let partition = (array, left, right) => {
+	let pivot = array[Math.floor((right + left) / 2)]; //middle element
 
-//extract all unique ingredients into one array
-let ingredientsOptions = [...new Set(recipesArray.map(a => a[1].ingredients.map(b => b.ingredient.toLowerCase())).flat())];
-//words from ingredients options
-let ingredientsWords = [...new Set(splitString(ingredientsOptions).flat())];
-//get lists of words from recipe name 
-let recipeName = [...new Set(recipesArray.map(a => a[1].name.toLowerCase()))];
-let recipeNameWords = [...new Set(splitString(recipeName).flat())];
-//get lists of words from descriptions
-let recipeDesc = [...new Set(recipesArray.map(a => a[1].description.toLowerCase().replace(/[^\w\s+è+ç+é+ï+à+ù+û+ô+ê+î]/gi, "")))];
-let recipeDescWords = splitString(recipeDesc).flat();
-//combine all options into one array for the main search
-let searchOptions = [...new Set(ingredientsWords.concat(recipeNameWords, recipeDescWords))]; //array of 890 strings
+	while (left <= right) {
+		while (array[left].localeCompare(pivot) < 0) {
+			left++;
+		}
+		while (array[right].localeCompare(pivot) > 0) {
+			right--;
+		}
+		if (left <= right) {
+			swap(array, left, right);
+			left++;
+			right--;
+		}
+	}
+	return left;
+}
+//function to swap position
+let swap = (items, leftIndex, rightIndex) => {
+	var temp = items[leftIndex];
+	items[leftIndex] = items[rightIndex];
+	items[rightIndex] = temp;
+}
+//filter and extract only id, name, ingredients, and description
+let createFilteredArr = (arr) => {
+	let filteredArr = [];
+	for (let i = 0; i<arr.length; i++) {
+		let filtered = (({id, ingredients, name, description}) => ({id, ingredients, name, description}))(arr[i][1]);
+		filteredArr.push(filtered);
+	}
+	return filteredArr;
+}
+let filteredArr = createFilteredArr(recipesArray);
+
+function FilterKeyword(item) {
+	this.id = item.id;
+	let thisIngre = item.ingredients.map(b => b.ingredient.toLowerCase()).flat();
+	let keywordString = item.name + " " + thisIngre + " " + item.description;
+	let uniqueValue = [...new Set(keywordString.split(/[\s,().]+/))];
+	this.keyword = quickSort(uniqueValue, 0, uniqueValue.length-1);
+}
+
+let extractKeyword = (arr) => {
+	let newArr = [];
+	for (let i=0; i<arr.length; i++) {
+		let keyword = new FilterKeyword(arr[i]);
+		newArr.push(keyword);
+	}
+	return newArr;
+}
+let filteredKeywordArr = extractKeyword(filteredArr);
+console.log(filteredKeywordArr);
+//take only the keywords
+let allKeywords = [];
+filteredKeywordArr.forEach(item => {allKeywords.push(item.keyword)});
+let searchOptions = [...new Set(allKeywords.flat())];
 
 //autocomplete function
 let autocomplete = (input, arr, minLength) => {
@@ -261,9 +335,53 @@ let autocomplete = (input, arr, minLength) => {
 		})
 	
 }
-
+let searchInput = document.getElementById("search-input");
 //implement the function on key press
-autocomplete(document.getElementById("search-input"), searchOptions, 2);
+autocomplete(searchInput, searchOptions, 2);
+
+//binary search function
+let binarySearch = (obj, target) => {
+	let start = 0;
+	let end = obj.keyword.length-1;
+	while(start <= end) {
+		let middleIndex = Math.floor((start+end)/2);
+
+		if (obj.keyword[middleIndex].toLowerCase().includes(target.toLowerCase())) {
+			return obj.id;
+		} else if (target.toLowerCase().localeCompare(obj.keyword[middleIndex].toLowerCase()) < 0) {
+			end = middleIndex - 1;
+		} else if (target.toLowerCase().localeCompare(obj.keyword[middleIndex].toLowerCase()) > 0) {
+			start = middleIndex +1;
+		} else {
+			return -1;
+		}
+	}
+}
+
+//function to clean all child
+let removeAllChildren = (children, parent) => {
+	children.forEach(child => {
+		parent.removeChild(child);
+	})
+}
+//searching function
+searchInput.addEventListener("keyup", function(e) {
+	let mainSection = document.getElementById("main");
+	let cardElm = Array.from(document.getElementsByClassName("recipe-card"));
+	if (searchInput.value.length > 2) {
+		removeAllChildren(cardElm, mainSection);
+		let input = e.target.value.toLowerCase();
+		for (let i=0; i<filteredKeywordArr.length; i++) {
+			let recipeId = binarySearch(filteredKeywordArr[i], input);
+			if (recipeId > 0) {
+				createCard(recipesArray[recipeId-1]);
+			}
+		}
+	} else {
+		removeAllChildren(cardElm, mainSection);
+		recipesArray.forEach(recipe => createCard(recipe));
+	}
+})
 
 //tag filtering functions
 //add item function for dropdown options
@@ -274,6 +392,8 @@ let addItem = (array, parentElm) => {
 		parentElm.appendChild(option);
 	})
 }
+//extract all unique ingredients into one array
+let ingredientsOptions = [...new Set(recipesArray.map(a => a[1].ingredients.map(b => b.ingredient.toLowerCase())).flat())];
 //put ingredients options into dropdown
 addItem(ingredientsOptions, document.getElementById("ingredients-dropdown"));
 //extract all unique tools into one array
