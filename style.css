@@ -104,7 +104,7 @@ input[type="text"] {
 }
 .tag-search {
 	display: none;
-	width: 600px;
+	width: 700px;
 }
 
 .tag-search input[type="text"] {
@@ -154,7 +154,7 @@ input[type="text"] {
 .container-tag-options.show-opts {
 	min-height: min-content;
 	height: 400px;
-	width: 600px;
+	width: 700px;
 	display: block;
 	border-radius: .25rem;
 	position: absolute;
@@ -162,4 +162,45 @@ input[type="text"] {
 	z-index: 2;
 	padding: .5rem;
 	margin: .125rem 0 0;
+	font-size: 1.2rem;
+}
+
+/* mobile view */
+@media all and (max-width: 768px) {
+	body {
+		margin: auto;
+		min-width: fit-content;
+	}
+
+	.btn-group {
+		flex-direction: column;
+	}
+
+	.btn {
+		font-size: 1rem;
+		padding: .5rem;
+		margin-bottom: .5rem;
+	}
+
+	.tag-search {
+		width: 100%;
+	}
+
+	.container-tag-options.show-opts {
+		font-size: 1rem;
+		height: 200px;
+		width: inherit;
+	}
+
+	.show-opts .dropdown-choices {
+		flex-wrap: nowrap;
+	}
+
+	.recipe-card {
+		min-width: 90%;
+	}
+
+	#main {
+		flex-direction: column;
+	}
 }

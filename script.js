@@ -171,15 +171,6 @@ let tokenTree = function (tokenArray) {
   	return startingPoint;
 };
 
-
-//function to split
-let splitString = (array) => {
-	let newArr = [];
-	for (let i=0; i<array.length; i++) {
-		newArr.push(array[i].split(" "));
-	}
-	return newArr;
-}
 //function sets to extract and sort all keywords
 //sorting functions
 let quickSort = (array, left, right) => {
@@ -381,7 +372,7 @@ searchInput.addEventListener("keyup", function(e) {
 		removeAllChildren(cardElm, mainSection);
 		recipesArray.forEach(recipe => createCard(recipe));
 	}
-})
+});
 
 //tag filtering functions
 //add item function for dropdown options
