@@ -126,6 +126,7 @@ let autocomplete = (input, arr, minLength) => {
 						b.addEventListener("click", function() {
 							//insert value
 							input.value = this.textContent;
+							launchSearch(e);
 							//close list
 							closeLists();
 						});
@@ -191,8 +192,8 @@ let removeAllChildren = (children, parent) => {
 		parent.removeChild(child);
 	})
 }
-//click on search icon
-searchInput.addEventListener("keyup", function(e) {
+//search function
+let launchSearch = (e) => {
 	let mainSection = document.getElementById("main");
 	let cardElm = Array.from(document.getElementsByClassName("recipe-card"));
 	if (searchInput.value.length > 2) {
@@ -211,8 +212,10 @@ searchInput.addEventListener("keyup", function(e) {
 	} else {
 		removeAllChildren(cardElm, mainSection);
 		recipesArray.forEach(recipe => createCard(recipe));
-	}	
-})
+	}
+}
+//implement on the main search bar
+searchInput.addEventListener("keyup", function(e) {launchSearch(e)});
 
 //tag filtering functions
 //add item function for dropdown options
