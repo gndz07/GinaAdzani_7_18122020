@@ -33,11 +33,11 @@ let createCard = (recipe) => {
 
 	let eachIngredient = recipe[1].ingredients.map(function(ingredients) {
 		if (Object.prototype.hasOwnProperty.call(ingredients, "quantity") && Object.prototype.hasOwnProperty.call(ingredients, "unit")) {
-			return "<p class='mb-0'><span class='font-weight-bold'>" + ingredients.ingredient + ": </span>"+ ingredients.quantity + ingredients.unit + "</p>";
+			return "<p class='mb-0'><span class='font-weight-bold ingredient'>" + ingredients.ingredient + "</span>: "+ ingredients.quantity + ingredients.unit + "</p>";
 		} else if (Object.prototype.hasOwnProperty.call(ingredients, "quantity") && !Object.prototype.hasOwnProperty.call(ingredients, "unit")) {
-			return "<p class='mb-0'><span class='font-weight-bold'>" + ingredients.ingredient + ": </span>"+ ingredients.quantity + "</p>";
+			return "<p class='mb-0'><span class='font-weight-bold ingredient'>" + ingredients.ingredient + "</span>: "+ ingredients.quantity + "</p>";
 		} else if (!Object.prototype.hasOwnProperty.call(ingredients, "quantity") && !Object.prototype.hasOwnProperty.call(ingredients, "unit")) {
-			return "<p class='mb-0'><span class='font-weight-bold'>" + ingredients.ingredient + "</span></p>";
+			return "<p class='mb-0'><span class='font-weight-bold ingredient'>" + ingredients.ingredient + "</span></p>";
 		}
 	}).join("");
 
@@ -48,12 +48,12 @@ let createCard = (recipe) => {
 	method.textContent = recipe[1].description;
 
 	//appliance section
-	let appliances = create("p", {class: "sr-only"});
+	let appliances = create("p", {class: "sr-only appliance"});
 	appliances.textContent = recipe[1].appliance;
 	//utensils section
 	let utensils = create("div", {class: "sr-only"});
 	let eachUtensils = recipe[1].ustensils.map(function(utensil) {
-		return "<p>" + utensil + "</p>";
+		return "<p class='utensil'>" + utensil + "</p>";
 	}).join("");
 	utensils.innerHTML = eachUtensils;
 	
@@ -377,7 +377,7 @@ let launchSearch = (e) => {
 searchInput.addEventListener("keyup", function(e) {launchSearch(e)});
 
 //tag filtering functions
-//add item function for dropdown options
+//function to add items for dropdown options
 let addItem = (array, parentElm) => {
 	array.forEach(item => {
 		let option = create("li", {class: "dropdown-item"});
@@ -385,41 +385,11 @@ let addItem = (array, parentElm) => {
 		parentElm.appendChild(option);
 	})
 }
-//extract all unique ingredients into one array
-let ingredientsOptions = [...new Set(recipesArray.map(a => a[1].ingredients.map(b => b.ingredient.toLowerCase())).flat())];
-//put ingredients options into dropdown
-addItem(ingredientsOptions, document.getElementById("ingredients-dropdown"));
-//extract all unique tools into one array
-let appliancesOptions = [...new Set(recipesArray.map(a => a[1].appliance))];
-//put appliances options into dropdown
-addItem(appliancesOptions, document.getElementById("appliances-dropdown"));
-//extract all unique utensils into one array
-let utensilsOptions = [...new Set(recipesArray.map(a => a[1].ustensils).flat())];
-//put utensils options into dropdown
-addItem(utensilsOptions, document.getElementById("utensils-dropdown"));
-
-//function to open dropdown
-let openDropdown = (btn) => {
-	btn.addEventListener("click", function(e) {
-		if (!btn.hasAttribute("style")) {
-			closeAllDropdowns();
-			btn.nextElementSibling.classList.add("show");
-			btn.nextElementSibling.nextElementSibling.classList.add("show-opts");
-			btn.style.display = "none";
-		} else {
-			btn.removeAttribute("style");
-			btn.nextElementSibling.classList.remove("show");
-		}
-	})
-}
-//implement the function
-Array.from(document.getElementsByClassName("tag-btn")).forEach(btn => openDropdown(btn));
-
 //search function on tag buttons
 let tagSearch = (input, options) => {
 	input.addEventListener("input", function(e) {
 		for (let i=0; i<options.length; i++) {
-			if (options[i].textContent.substr(0, e.target.value.length).toLowerCase() != e.target.value.toLowerCase()) {
+			if (!options[i].textContent.includes(e.target.value.toLowerCase())) {
 				options[i].style.display = "none";
 			} else {
 				options[i].removeAttribute("style");
@@ -427,8 +397,42 @@ let tagSearch = (input, options) => {
 		}
 	})
 }
+
+let openDropdown = (btn, className, parentElm, inputId, optionsArray) => {
+		//close other open dropdowns, if any
+		closeAllDropdowns();
+		//empty current dropdown
+		document.getElementById(parentElm).textContent = "";
+		//take available tag options from DOM
+		let choices = Array.from(document.querySelectorAll(className));
+		let choicesArr = [];
+		choices.forEach(choice => {
+			choicesArr.push(choice.textContent);
+		})
+		let optionsArr = [...new Set(choicesArr)];
+		//put into dropdown options
+		addItem(optionsArr, document.getElementById(parentElm));
+		//run keyword search function
+		tagSearch(document.getElementById(inputId), Array.from(document.querySelectorAll(optionsArray)));
+		if (!btn.hasAttribute("style")) {
+			btn.nextElementSibling.classList.add("show");
+			btn.nextElementSibling.nextElementSibling.classList.add("show-opts");
+			btn.style.display = "none";
+		} else {
+			btn.removeAttribute("style");
+			btn.nextElementSibling.classList.remove("show");
+		}
+};
+//implement the function
+//ingredient tag
+document.getElementById("ingredients-tag-btn").addEventListener("click", function(e) {openDropdown(e.target, ".ingredient", "ingredients-dropdown", "ingredients-tag-input", "#ingredients-dropdown .dropdown-item")});
+//appliances tag
+document.getElementById("appliances-tag-btn").addEventListener("click", function(e) {openDropdown(e.target, ".appliance", "appliances-dropdown", "appliances-tag-input", "#appliances-dropdown .dropdown-item")});
+//utensils tag
+document.getElementById("utensils-tag-btn").addEventListener("click", function(e) {openDropdown(e.target, ".utensil", "utensils-dropdown", "utensils-tag-input", "#utensils-dropdown .dropdown-item")});
+
 //ingredients dropdown
-tagSearch(document.getElementById("ingredients-tag-input"), Array.from(document.querySelectorAll("#ingredients-dropdown .dropdown-item")));
+//tagSearch(document.getElementById("ingredients-tag-input"), Array.from(document.querySelectorAll("#ingredients-dropdown .dropdown-item")));
 tagSearch(document.getElementById("appliances-tag-input"), Array.from(document.querySelectorAll("#appliances-dropdown .dropdown-item")));
 tagSearch(document.getElementById("utensils-tag-input"), Array.from(document.querySelectorAll("#utensils-dropdown .dropdown-item")));
 //create selected tag button
@@ -464,15 +468,17 @@ let unfilterTag = (tag) => {
 		}
 	}
 }
-
+//function when user click on a tag option
 document.addEventListener("click", function(e) {
 	if (e.target.matches(".dropdown-item")) { //selecting tag filter
 		createTag(e.target);
 		filterByTag(e.target);
 		closeAllDropdowns();
-	} else if (e.target.matches(".fa-times")) {
+	} else if (e.target.matches(".fa-times")) { //delete the selected tag
 		document.getElementById("selected-tags").removeChild(e.target.parentElement);
 		unfilterTag(e.target.parentElement);
+	} else if (!e.target.matches(".tag-btn")) { //close dropdowns when clicking anywhere on the page
+		closeAllDropdowns();
 	}
 })
 
@@ -482,7 +488,7 @@ let closeAllDropdowns = () => {
 	Array.from(document.getElementsByClassName("tag-search")).forEach(item => {item.classList.remove("show")});
 	Array.from(document.getElementsByClassName("container-tag-options")).forEach(item => {item.classList.remove("show-opts")});
 }
-//closs by clicking on arrow up
+//close by clicking on arrow up
 Array.from(document.getElementsByClassName("fa-chevron-up")).forEach(item => {
 	item.addEventListener("click", function() {
 		closeAllDropdowns();
