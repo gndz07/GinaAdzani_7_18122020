@@ -316,9 +316,11 @@ document.addEventListener("click", function(e) {
 		createTag(e.target);
 		filterByTag(e.target);
 		closeAllDropdowns();
-	} else if (e.target.matches(".fa-times")) {
+	} else if (e.target.matches(".fa-times")) { //delete the selected tag
 		document.getElementById("selected-tags").removeChild(e.target.parentElement);
 		unfilterTag(e.target.parentElement);
+	} else if (!e.target.matches(".tag-btn")) { //close dropdowns when clicking anywhere on the page
+		closeAllDropdowns();
 	}
 })
 
@@ -328,7 +330,7 @@ let closeAllDropdowns = () => {
 	Array.from(document.getElementsByClassName("tag-search")).forEach(item => {item.classList.remove("show")});
 	Array.from(document.getElementsByClassName("container-tag-options")).forEach(item => {item.classList.remove("show-opts")});
 }
-//closs by clicking on arrow up
+//close by clicking on arrow up
 Array.from(document.getElementsByClassName("fa-chevron-up")).forEach(item => {
 	item.addEventListener("click", function() {
 		closeAllDropdowns();
