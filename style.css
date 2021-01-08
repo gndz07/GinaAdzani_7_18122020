@@ -17,7 +17,6 @@ input[type="text"] {
 .recipe-card {
 	background-color: #f8f9fb;
 	border-radius: 10px;
-	height: 450px;
 	min-width: 30%;
 	max-width: 30%;
 	cursor: pointer;
@@ -87,7 +86,7 @@ input[type="text"] {
 	display: flex;
 	flex-flow: column wrap;
 	z-index: 3;
-	height: inherit;
+	max-height: 400px;
 	overflow: hidden;
 	padding-left: 0;
 	margin-top: -0.5rem;
@@ -158,9 +157,8 @@ input[type="text"] {
 	display: none;
 }
 .container-tag-options.show-opts {
-	min-height: min-content;
+	max-height: 400px;
 	width: inherit;
-	height: 400px;
 	display: block;
 	border-radius: .25rem;
 	position: absolute;
@@ -169,6 +167,43 @@ input[type="text"] {
 	padding: .5rem;
 	margin: .125rem 0 0;
 	font-size: 1.2rem;
+}
+
+.card-content-title {
+	min-height: 4rem;
+	max-height: fit-content;
+}
+
+.ingredient-container {
+	height: 6.9rem;
+	overflow: hidden;
+}
+
+.description {
+	overflow: hidden;
+	position: relative;
+	line-height: 1.4rem;
+	max-height: 7rem;
+	text-align: justify;
+	padding-right: 1em;
+	margin: 0 -1em -2rem .5rem;
+}
+
+.description:before {
+	content: '...';
+	position: absolute;
+	right: 0;
+	bottom: 0;
+}
+
+.description:after {
+	content: '';
+	position: absolute;
+	right: 0;
+	width: 1em;
+	height: 1em;
+	margin-top: 0.2em;
+	background: white;
 }
 
 /* mobile view */

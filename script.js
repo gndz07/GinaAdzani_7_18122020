@@ -29,7 +29,7 @@ let createCard = (recipe) => {
 	headerParent.appendChild(timeParent);
 
 	//ingredients list
-	let ingredients = create("div");
+	let ingredients = create("div", {class: "ingredient-container"});
 
 	let eachIngredient = recipe[1].ingredients.map(function(ingredients) {
 		if (Object.prototype.hasOwnProperty.call(ingredients, "quantity") && Object.prototype.hasOwnProperty.call(ingredients, "unit")) {
@@ -44,7 +44,7 @@ let createCard = (recipe) => {
 	ingredients.innerHTML = eachIngredient;
 
 	//cook method
-	let method = create("p", {class: "w-50"});
+	let method = create("p", {class: "description w-50"});
 	method.textContent = recipe[1].description;
 
 	//appliance section
@@ -369,12 +369,22 @@ let launchSearch = (e) => {
 				createCard(recipesArray[recipeId-1]);
 			}
 		}
+		noResult();
 	} else {
 		removeAllChildren(cardElm, mainSection);
 		recipesArray.forEach(recipe => createCard(recipe));
 	}
 }
 searchInput.addEventListener("keyup", function(e) {launchSearch(e)});
+
+let noResult = () => {
+	let mainSection = document.getElementById("main");
+	if (mainSection.innerHTML = "") {
+		mainSection.innerHTML = "Aucune recette ne correspond à votre critère… vous pouvez chercher « tarte aux pommes », « poisson », etc.";
+	}
+};
+
+
 
 //tag filtering functions
 //function to add items for dropdown options
