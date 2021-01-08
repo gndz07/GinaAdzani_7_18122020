@@ -399,29 +399,28 @@ let tagSearch = (input, options) => {
 }
 
 let openDropdown = (btn, className, parentElm, inputId, optionsArray) => {
-		//close other open dropdowns, if any
-		closeAllDropdowns();
-		//empty current dropdown
-		document.getElementById(parentElm).textContent = "";
-		//take available tag options from DOM
-		let choices = Array.from(document.querySelectorAll(className));
-		let choicesArr = [];
-		choices.forEach(choice => {
-			choicesArr.push(choice.textContent);
-		})
-		let optionsArr = [...new Set(choicesArr)];
-		//put into dropdown options
-		addItem(optionsArr, document.getElementById(parentElm));
-		//run keyword search function
-		tagSearch(document.getElementById(inputId), Array.from(document.querySelectorAll(optionsArray)));
-		if (!btn.hasAttribute("style")) {
-			btn.nextElementSibling.classList.add("show");
-			btn.nextElementSibling.nextElementSibling.classList.add("show-opts");
-			btn.style.display = "none";
-		} else {
-			btn.removeAttribute("style");
-			btn.nextElementSibling.classList.remove("show");
-		}
+	//close other open dropdowns, if any
+	closeAllDropdowns();
+	//current dropdown DOM
+	let dropdownContainer = document.getElementById(parentElm);
+	//empty current dropdown
+	dropdownContainer.textContent = "";
+	//take available tag options from DOM
+	let choices = Array.from(document.querySelectorAll(className));
+	let choicesArr = [];
+	choices.forEach(choice => {
+		choicesArr.push(choice.textContent);
+	})
+	let optionsArr = [...new Set(choicesArr)];
+	//put into dropdown options
+	addItem(optionsArr, dropdownContainer);
+	//search input DOM
+	let inputField = document.getElementById(inputId);
+	//run keyword search function
+	tagSearch(inputField, Array.from(document.querySelectorAll(optionsArray)));
+	inputField.parentElement.classList.add("show");
+	dropdownContainer.parentElement.classList.add("show-opts");
+	btn.style.display = "none";
 };
 //implement the function
 //ingredient tag
