@@ -241,29 +241,29 @@ let tagSearch = (input, options) => {
 }
 
 let openDropdown = (btn, className, parentElm, inputId, optionsArray) => {
-		//close other open dropdowns, if any
-		closeAllDropdowns();
-		//empty current dropdown
-		document.getElementById(parentElm).textContent = "";
-		//take available tag options from DOM
-		let choices = Array.from(document.querySelectorAll(className));
-		let choicesArr = [];
-		choices.forEach(choice => {
-			choicesArr.push(choice.textContent);
-		})
-		let optionsArr = [...new Set(choicesArr)];
-		//put into dropdown options
-		addItem(optionsArr, document.getElementById(parentElm));
-		//run keyword search function
-		tagSearch(document.getElementById(inputId), Array.from(document.querySelectorAll(optionsArray)));
-		if (!btn.hasAttribute("style")) {
-			btn.nextElementSibling.classList.add("show");
-			btn.nextElementSibling.nextElementSibling.classList.add("show-opts");
-			btn.style.display = "none";
-		} else {
-			btn.removeAttribute("style");
-			btn.nextElementSibling.classList.remove("show");
-		}
+	//close other open dropdowns, if any
+	closeAllDropdowns();
+	//current dropdown DOM
+	let dropdownContainer = document.getElementById(parentElm);
+	//empty current dropdown
+	dropdownContainer.textContent = "";
+	//take available tag options from DOM
+	let choices = Array.from(document.querySelectorAll(className));
+	let choicesArr = [];
+	choices.forEach(choice => {
+		choicesArr.push(choice.textContent);
+	})
+	let optionsArr = [...new Set(choicesArr)];
+	//put into dropdown options
+	addItem(optionsArr, dropdownContainer);
+	//search input DOM
+	let inputField = document.getElementById(inputId);
+	//run keyword search function
+	tagSearch(inputField, Array.from(document.querySelectorAll(optionsArray)));
+	inputField.parentElement.classList.add("show");
+	inputField.parentNode.parentElement.classList.add("show");
+	dropdownContainer.parentElement.classList.add("show-opts");
+	btn.style.display = "none";
 };
 //implement the function
 //ingredient tag
@@ -319,7 +319,10 @@ document.addEventListener("click", function(e) {
 	} else if (e.target.matches(".fa-times")) { //delete the selected tag
 		document.getElementById("selected-tags").removeChild(e.target.parentElement);
 		unfilterTag(e.target.parentElement);
-	} else if (!e.target.matches(".tag-btn")) { //close dropdowns when clicking anywhere on the page
+	} else if (e.target.matches(".tag-search-input")) { //prevent event bubble from clicking on input field
+		e.stopPropagation();
+		e.preventDefault();
+	} else if (!e.target.matches(".tag-btn")) { //close dropdowns when click wherever
 		closeAllDropdowns();
 	}
 })
@@ -329,6 +332,7 @@ let closeAllDropdowns = () => {
 	Array.from(document.getElementsByClassName("tag-btn")).forEach(btn => {btn.removeAttribute("style")});
 	Array.from(document.getElementsByClassName("tag-search")).forEach(item => {item.classList.remove("show")});
 	Array.from(document.getElementsByClassName("container-tag-options")).forEach(item => {item.classList.remove("show-opts")});
+	Array.from(document.getElementsByClassName("opened-btn-container")).forEach(item => {item.classList.remove("show")});
 }
 //close by clicking on arrow up
 Array.from(document.getElementsByClassName("fa-chevron-up")).forEach(item => {

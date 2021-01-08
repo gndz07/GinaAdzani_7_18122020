@@ -103,9 +103,14 @@ input[type="text"] {
 	justify-content: space-between;
 	color: white;
 }
+
+.opened-btn-container.show {
+	width: 700px;
+}
+
 .tag-search {
 	display: none;
-	width: 700px;
+	width: inherit;
 }
 
 .tag-search input[type="text"] {
@@ -154,8 +159,8 @@ input[type="text"] {
 }
 .container-tag-options.show-opts {
 	min-height: min-content;
+	width: inherit;
 	height: 400px;
-	width: 700px;
 	display: block;
 	border-radius: .25rem;
 	position: absolute;
