@@ -419,6 +419,7 @@ let openDropdown = (btn, className, parentElm, inputId, optionsArray) => {
 	//run keyword search function
 	tagSearch(inputField, Array.from(document.querySelectorAll(optionsArray)));
 	inputField.parentElement.classList.add("show");
+	inputField.parentNode.parentElement.classList.add("show");
 	dropdownContainer.parentElement.classList.add("show-opts");
 	btn.style.display = "none";
 };
@@ -476,7 +477,10 @@ document.addEventListener("click", function(e) {
 	} else if (e.target.matches(".fa-times")) { //delete the selected tag
 		document.getElementById("selected-tags").removeChild(e.target.parentElement);
 		unfilterTag(e.target.parentElement);
-	} else if (!e.target.matches(".tag-btn")) { //close dropdowns when clicking anywhere on the page
+	} else if (e.target.matches(".tag-search-input")) { //prevent event bubble from clicking on input field
+		e.stopPropagation();
+		e.preventDefault();
+	} else if (!e.target.matches(".tag-btn")) { //close dropdowns when click wherever
 		closeAllDropdowns();
 	}
 })
@@ -486,6 +490,7 @@ let closeAllDropdowns = () => {
 	Array.from(document.getElementsByClassName("tag-btn")).forEach(btn => {btn.removeAttribute("style")});
 	Array.from(document.getElementsByClassName("tag-search")).forEach(item => {item.classList.remove("show")});
 	Array.from(document.getElementsByClassName("container-tag-options")).forEach(item => {item.classList.remove("show-opts")});
+	Array.from(document.getElementsByClassName("opened-btn-container")).forEach(item => {item.classList.remove("show")});
 }
 //close by clicking on arrow up
 Array.from(document.getElementsByClassName("fa-chevron-up")).forEach(item => {
