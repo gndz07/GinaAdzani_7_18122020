@@ -369,7 +369,6 @@ let launchSearch = (e) => {
 				createCard(recipesArray[recipeId-1]);
 			}
 		}
-		noResult();
 	} else {
 		removeAllChildren(cardElm, mainSection);
 		recipesArray.forEach(recipe => createCard(recipe));
@@ -377,12 +376,12 @@ let launchSearch = (e) => {
 }
 searchInput.addEventListener("keyup", function(e) {launchSearch(e)});
 
-let noResult = () => {
+/*let noResult = () => {
 	let mainSection = document.getElementById("main");
 	if (mainSection.innerHTML = "") {
 		mainSection.innerHTML = "Aucune recette ne correspond à votre critère… vous pouvez chercher « tarte aux pommes », « poisson », etc.";
 	}
-};
+};*/
 
 
 
