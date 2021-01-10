@@ -206,6 +206,13 @@ input[type="text"] {
 	background: white;
 }
 
+#noresult-msg {
+	font-size: 2rem;
+	font-weight: bold;
+	text-align: center;
+	margin-right: 4rem;
+}
+
 /* mobile view */
 @media all and (max-width: 768px) {
 	body {

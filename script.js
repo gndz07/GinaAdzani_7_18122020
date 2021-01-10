@@ -350,40 +350,33 @@ let binarySearch = (obj, target) => {
 	}
 }
 
-//function to clean all child
-let removeAllChildren = (children, parent) => {
-	children.forEach(child => {
-		parent.removeChild(child);
-	})
-}
 //searching function
 let launchSearch = (e) => {
 	let mainSection = document.getElementById("main");
 	let cardElm = Array.from(document.getElementsByClassName("recipe-card"));
+	let selectedArr = [];
 	if (searchInput.value.length > 2) {
-		removeAllChildren(cardElm, mainSection);
+		mainSection.innerHTML = "";
 		let input = e.target.value.toLowerCase();
 		for (let i=0; i<filteredKeywordArr.length; i++) {
 			let recipeId = binarySearch(filteredKeywordArr[i], input);
 			if (recipeId > 0) {
-				createCard(recipesArray[recipeId-1]);
+				selectedArr.push(recipeId);
 			}
 		}
+		if (selectedArr.length > 0) {
+			selectedArr.forEach(recipeId => {
+			createCard(recipesArray[recipeId-1]);
+		})
+		} else {
+			mainSection.innerHTML = "<p id='noresult-msg'>Aucune recette ne correspond à votre critère… vous pouvez chercher « tarte aux pommes », « poisson », etc.</p>";
+		}
 	} else {
-		removeAllChildren(cardElm, mainSection);
+		mainSection.innerHTML = "";
 		recipesArray.forEach(recipe => createCard(recipe));
 	}
 }
 searchInput.addEventListener("keyup", function(e) {launchSearch(e)});
-
-/*let noResult = () => {
-	let mainSection = document.getElementById("main");
-	if (mainSection.innerHTML = "") {
-		mainSection.innerHTML = "Aucune recette ne correspond à votre critère… vous pouvez chercher « tarte aux pommes », « poisson », etc.";
-	}
-};*/
-
-
 
 //tag filtering functions
 //function to add items for dropdown options
