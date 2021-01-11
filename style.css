@@ -170,6 +170,12 @@ input[type="text"] {
 	margin: .125rem 0 0;
 	font-size: 1.2rem;
 }
+#noresult-msg {
+	font-size: 2rem;
+	font-weight: bold;
+	text-align: center;
+	margin-right: 4rem;
+}
 
 /* mobile view */
 @media all and (max-width: 768px) {

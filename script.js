@@ -186,34 +186,32 @@ let searchInput = document.getElementById("search-input");
 //implement the function on key press
 autocomplete(searchInput, searchOptions, 2);
 
-//function to clean all child
-let removeAllChildren = (children, parent) => {
-	children.forEach(child => {
-		parent.removeChild(child);
-	})
-}
 	
 //search function
 let launchSearch = (e) => {
 	let mainSection = document.getElementById("main");
-	let cardElm = Array.from(document.getElementsByClassName("recipe-card"));
 	if (searchInput.value.length > 2) {
 		let input = e.target.value.toLowerCase();
-		removeAllChildren(cardElm, mainSection);
+		let selectedArr = [];
+		mainSection.innerHTML = "";
 		for (let i=0; i<recipesArray.length; i++) {
 			if (recipesArray[i][1].name.toLowerCase().includes(input) ||
 				recipesArray[i][1].description.toLowerCase().includes(input) ||
 				Object.values(recipesArray[i][1].ingredients).indexOf(input) > -1) {
-				createCard(recipesArray[i]);
+				selectedArr.push(recipesArray[i]);
 			}
 		}
-		if (mainSection.childNodes.length < 1) {
-			mainSection.innerHTML = "<p>Aucune recette ne correspond à votre critère… vous pouvez chercher « tarte aux pommes », « poisson », etc.</p>";
-		};
+		if (selectedArr.length > 0) {
+			selectedArr.forEach(recipe => {
+			createCard(recipe);
+		})
+		} else {
+			mainSection.innerHTML = "<p id='noresult-msg'>Aucune recette ne correspond à votre critère… vous pouvez chercher « tarte aux pommes », « poisson », etc.</p>";
+		}
 	} else {
-		removeAllChildren(cardElm, mainSection);
+		mainSection.innerHTML = "";
 		recipesArray.forEach(recipe => createCard(recipe));
-	}
+	} 
 }
 //implement on the main search bar
 searchInput.addEventListener("keyup", function(e) {launchSearch(e)});
