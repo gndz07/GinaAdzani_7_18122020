@@ -81,96 +81,7 @@ let createCard = (recipe) => {
 
 recipesArray.forEach(recipe => createCard(recipe));
 
-//token tree creation function
-let tokenTree = function (tokenArray) {
-	let createLetterObject = function (l) {
-    	let pChildren = [];
-
-    	let getMatchingWords = function (characterArr, availableWords, children) {
-        	if (characterArr.length === 0) {
-            	for (let child in children) {
-                	if ({}.hasOwnProperty.call(children, child)) {
-                    	let currentChild = children[child];
-
-                    	let words = currentChild.getWords(characterArr);
-
-                    	for (let pos in words) {
-                        	if ({}.hasOwnProperty.call(words, pos)) {
-                            	availableWords.push(words[pos]);
-                        	}
-                    	}
-
-                    	if (currentChild.word) {
-                        	availableWords.push(currentChild.word);
-                    	}
-                	}
-            	}
-        	} else {
-            	let currentCharacter = characterArr.pop();
-           		getMatchingWords(characterArr, availableWords, children[currentCharacter].children);
-        	}
-    	};
-
-    	function getWords(wordPart) {
-        	let len = wordPart.length;
-        	let arr = [];
-        	let wordList = [];
-
-        	for (let i = len - 1; i >= 0; i --) {
-            	arr.push(wordPart[i].toUpperCase());
-        	}
-
-        	getMatchingWords(arr, wordList, pChildren);
-
-        	return wordList;
-   		}
-
-    	return {
-        	letter: l,
-        	children: pChildren,
-        	parent: null,
-        	word: null,
-        	getWords: getWords
-    	};
-	};
-
-	let startingPoint = createLetterObject();
-
-	function parseWord(wordCharacterArray, parent, fullWord) {
-    	if (wordCharacterArray.length === 0) {
-        	parent.word = fullWord;
-        	return;
-    	}
-
-    	let currentCharacter = wordCharacterArray.pop().toUpperCase();
-
-    	if (!parent.children[currentCharacter]) {
-       		parent.children[currentCharacter] = createLetterObject(currentCharacter);
-    	}
-    	parseWord(wordCharacterArray, parent.children[currentCharacter], fullWord);
-	}
-
-	for (let counter in tokenArray) {
-    	if ({}.hasOwnProperty.call(tokenArray, counter)) {
-        	let word = tokenArray[counter];
-
-        	if (!word) {
-            	continue;
-        	}
-
-        	let arr = [];
-
-        	let wordLength = word.length;
-
-        	for (let i = wordLength - 1; i >= 0; i--) {
-            	arr.push(word[i]);
-        	}
-        	parseWord(arr, startingPoint, word);
-    	}
-	}
-  	return startingPoint;
-};
-
+//PRINCIPAL SEARCH
 //function sets to extract and sort all keywords
 //sorting functions
 let quickSort = (array, left, right) => {
@@ -260,30 +171,29 @@ let autocomplete = (input, arr, minLength) => {
 				let a = create("div", {class: "autocomplete-items", id: this.id+"-autocomplete-lists"});
 				//append to parent element
 				this.parentNode.appendChild(a);
-				//launch the trie function
-				let tree = tokenTree(arr);
-				let lists = tree.getWords(val);
-				//shows each item in the list
-				lists.forEach(item => {
-					let b = create("p");
-					b.textContent = item;
-					//when click on the value
-					b.addEventListener("click", function() {
-						//insert value
-						input.value = this.textContent;
-						launchSearch(e);
-						//close list
-						closeLists();
-					});
-					a.appendChild(b);
-				})
+				///iterate the array
+				for (let i=0; i<arr.length; i++) {
+					if (arr[i].substr(0, val.length).toLowerCase() == val.toLowerCase()) {
+						let b = create("p");
+						b.textContent = arr[i];
+						//when click on the value
+						b.addEventListener("click", function() {
+							//insert value
+							input.value = this.textContent;
+							launchSearch(e);
+							//close list
+							closeLists();
+						});
+						a.appendChild(b);
+					}
+				}
 			} else {
 				closeLists();
 			}
 		});
 		//execute function on keydown
 		input.addEventListener("keydown", function(e) {
-			let x = document.getElementById(this.id + "autocomplete-lists");
+			let x = document.getElementById(this.id + "-autocomplete-lists");
 			if (x) x = x.getElementsByTagName("p");
 			if (e.keyCode == 40) { //key down
 				currentFocus++;

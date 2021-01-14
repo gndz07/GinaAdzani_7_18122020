@@ -84,8 +84,10 @@ input[type="text"] {
 
 .show-opts .dropdown-choices {
 	display: flex;
-	flex-flow: column wrap;
+	/*flex-direction: column;*/
+	flex-wrap: wrap;
 	z-index: 3;
+	max-width: 700px;
 	max-height: 400px;
 	overflow: hidden;
 	padding-left: 0;
@@ -104,7 +106,10 @@ input[type="text"] {
 }
 
 .opened-btn-container.show {
-	width: 700px;
+	width: fit-content;
+	display: flex;
+	flex-direction: column;
+
 }
 
 .tag-search {
@@ -140,6 +145,7 @@ input[type="text"] {
 }
 
 .tag-search.show {
+	width: 100%;
 	display: flex;
 	justify-content: space-around;
 }
@@ -161,7 +167,7 @@ input[type="text"] {
 	width: inherit;
 	display: block;
 	border-radius: .25rem;
-	position: absolute;
+	/*position: absolute;*/
 	top: 93%;
 	z-index: 2;
 	padding: .5rem;
@@ -172,6 +178,12 @@ input[type="text"] {
 .card-content-title {
 	min-height: 4rem;
 	max-height: fit-content;
+}
+
+.card-deck {
+	margin: 0!important;
+	position: absolute;
+	top: 45%;
 }
 
 .ingredient-container {
