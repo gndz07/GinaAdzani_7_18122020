@@ -186,35 +186,18 @@ input[type="text"] {
 }
 
 .ingredient-container {
-	height: 6.9rem;
 	overflow: hidden;
 }
 
 .description {
 	overflow: hidden;
-	position: relative;
-	line-height: 1.4rem;
-	max-height: 7rem;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 6;
+	-webkit-box-orient: vertical;
 	text-align: justify;
 	padding-right: 1em;
 	margin: 0 -1em -2rem .5rem;
-}
-
-.description:before {
-	content: '...';
-	position: absolute;
-	right: 0;
-	bottom: 0;
-}
-
-.description:after {
-	content: '';
-	position: absolute;
-	right: 0;
-	width: 1em;
-	height: 1em;
-	margin-top: 0.2em;
-	background: white;
 }
 
 #noresult-msg {
