@@ -392,6 +392,8 @@ document.addEventListener("click", function(e) {
 	} else if (e.target.matches(".tag-search-input")) { //prevent event bubble from clicking on input field
 		e.stopPropagation();
 		e.preventDefault();
+	} else if (e.target.matches(".fa-chevron-down")) { //prevent event bubble from clicking on down arrow
+		e.target.parentElement.click();
 	} else if (!e.target.matches(".tag-btn")) { //close dropdowns when click wherever
 		closeAllDropdowns();
 	}
