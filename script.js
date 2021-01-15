@@ -301,7 +301,7 @@ let addItem = (array, parentElm) => {
 let tagSearch = (input, options) => {
 	input.addEventListener("input", function(e) {
 		for (let i=0; i<options.length; i++) {
-			if (!options[i].textContent.includes(e.target.value.toLowerCase())) {
+			if (!options[i].textContent.toLowerCase().includes(e.target.value.toLowerCase())) {
 				options[i].style.display = "none";
 			} else {
 				options[i].removeAttribute("style");

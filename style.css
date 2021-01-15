@@ -84,14 +84,15 @@ input[type="text"] {
 
 .show-opts .dropdown-choices {
 	display: flex;
-	/*flex-direction: column;*/
 	flex-wrap: wrap;
+	writing-mode: vertical-lr;
 	z-index: 3;
 	max-width: 700px;
 	max-height: 400px;
 	overflow: hidden;
 	padding-left: 0;
-	margin-top: -0.5rem;
+	margin: -0.5rem 0 0 0;
+	padding: 0;
 }
 
 .fa-chevron-down {
@@ -129,6 +130,7 @@ input[type="text"] {
 	color: white;
 	cursor: pointer;
 	width: 33%;
+	writing-mode: horizontal-tb;
 }
 
 .selected-tag-btn {
@@ -164,14 +166,11 @@ input[type="text"] {
 }
 .container-tag-options.show-opts {
 	max-height: 400px;
-	width: inherit;
 	display: block;
-	border-radius: .25rem;
-	/*position: absolute;*/
-	top: 93%;
+	border-radius: 0 0 .25rem .25rem;
+	margin-top: -0.125rem;
 	z-index: 2;
 	padding: .5rem;
-	margin: .125rem 0 0;
 	font-size: 1.2rem;
 }
 
