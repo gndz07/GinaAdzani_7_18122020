@@ -3,101 +3,101 @@
 <html lang="fr">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://kit.fontawesome.com/6b2f05754f.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="style.css">
-    <title>Les Petits Plats</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<script src="https://kit.fontawesome.com/6b2f05754f.js" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="style.css">
+	<title>Les Petits Plats</title>
 </head>
 
 <body>
-    <div class="container-fluid">
+	<div class="container-fluid">
 
-        <div class="row">
-            <nav class="col navbar navbar-expand">
-                <a class="navbar-brand mx-auto d-block mt-4" href="index.html">
-                    <img src="logo_lespetitsplats.png" width="300" alt="Les Petits Plats Homepage">
-                </a>
-            </nav>
-        </div>
+		<div class="row">
+			<nav class="col navbar navbar-expand">
+				<a class="navbar-brand mx-auto d-block mt-4" href="index.html">
+					<img src="logo_lespetitsplats.png" width="300" alt="Les Petits Plats Homepage">
+				</a>
+			</nav>
+		</div>
 
 
-        <div class="row">
-            <div class="col input-group input-group-lg mx-5" id="autocomplete">
-                <input class="form-control" id="search-input" type="text" name="search-input" placeholder="Rechercher un ingrédient, appareil, ustensiles ou une recette">
-                <div class="input-group-append">
-                    <span id="launch-search" class="input-group-text">
-                        <i class="fas fa-search"></i>
-                    </span>
-                </div>
-            </div>
-        </div>
+		<div class="row">
+			<div class="col input-group input-group-lg mx-5 mb-4" id="autocomplete">
+				<input class="form-control" id="search-input" type="text" name="search-input" placeholder="Rechercher un ingrédient, appareil, ustensiles ou une recette">
+				<div class="input-group-append">
+					<span id="launch-search" class="input-group-text">
+						<i class="fas fa-search"></i>
+					</span>
+				</div>
+			</div>
+		</div>
 
-        <div id="selected-tags" class="mx-5 mt-3">
-            
-        </div>
+		<div id="selected-tags" class="mx-5">
+			
+		</div>
 
-        <div class="btn-group ml-3 ml-md-5 my-4">
-            <div class="dropdown-parent">
-                <button id="ingredients-tag-btn" class="btn btn-primary btn-lg mx-2 tag-btn show" type="button">Ingrédients
-                    <span class="fas fa-chevron-down"></span>
-                </button>
-                <div class="opened-btn-container">
-                    <button id="ingredients-search" class="btn btn-primary tag-search">
-                        <input id="ingredients-tag-input" class="form-control bg-primary tag-search-input" type="text" name="search-ingredient" placeholder="Rechercher un ingrédient">
-                        <span class="fas fa-chevron-up mr-2 align-self-center"></span>
-                    </button>
-                    <div class="container-tag-options bg-primary">
-                        <ul class="dropdown-choices" id="ingredients-dropdown">
-                    
-                        </ul>
-                    </div>
-                </div>
-            </div>
+		<div class="btn-group ml-3 ml-md-5 mt-3">
+     		<div class="dropdown-parent">
+     			<button id="ingredients-tag-btn" class="btn btn-primary btn-lg mx-2 tag-btn show" type="button">Ingrédients
+     				<span class="fas fa-chevron-down"></span>
+     			</button>
+     			<div class="opened-btn-container bg-primary">
+     				<button id="ingredients-search" class="btn btn-primary tag-search">
+     					<input id="ingredients-tag-input" class="form-control bg-primary tag-search-input" type="text" name="search-ingredient" placeholder="Rechercher un ingrédient">
+     					<span class="fas fa-chevron-up mr-2 align-self-center"></span>
+     				</button>
+     				<div class="container-tag-options bg-primary">
+     					<ul class="dropdown-choices" id="ingredients-dropdown">
+     				
+     					</ul>
+     				</div>
+     			</div>
+     		</div>
 
-            <div class="dropdown-parent">
-                <button id="appliances-tag-btn" class="btn bg-green btn-lg mx-2 tag-btn show" type="button">Appareils
-                    <span class="fas fa-chevron-down"></span>
-                </button>
-                <div class="opened-btn-container">
-                    <button id="appliances-search" class="btn bg-green tag-search">
-                        <input id="appliances-tag-input" class="form-control bg-green tag-search-input" type="text" name="search-appliance" placeholder="Rechercher un appareil">
-                        <span class="fas fa-chevron-up mr-2 align-self-center"></span>
-                    </button>
-                    <div class="container-tag-options bg-green">
-                        <ul class="dropdown-choices bg-green" id="appliances-dropdown">
-                
-                        </ul>
-                    </div>
-                </div>
-            </div>
+   			<div class="dropdown-parent">
+     			<button id="appliances-tag-btn" class="btn bg-green btn-lg mx-2 tag-btn show" type="button">Appareils
+     				<span class="fas fa-chevron-down"></span>
+     			</button>
+     			<div class="opened-btn-container">
+     				<button id="appliances-search" class="btn bg-green tag-search">
+     					<input id="appliances-tag-input" class="form-control bg-green tag-search-input" type="text" name="search-appliance" placeholder="Rechercher un appareil">
+     					<span class="fas fa-chevron-up mr-2 align-self-center"></span>
+     				</button>
+     				<div class="container-tag-options bg-green">
+     					<ul class="dropdown-choices bg-green" id="appliances-dropdown">
+     			
+     					</ul>
+     				</div>
+     			</div>
+     		</div>
 
-            <div class="dropdown-parent">
-                <button id="utensils-tag-btn" class="btn bg-orange btn-lg mx-2 tag-btn show" type="button">Ustensiles
-                    <span class="fas fa-chevron-down"></span>
-                </button>
-                <div class="opened-btn-container">
-                    <button id="utensils-search" class="btn bg-orange tag-search">
-                        <input id="utensils-tag-input" class="form-control bg-orange tag-search-input" type="text" name="search-utensil" placeholder="Rechercher un ustensile">
-                        <span class="fas fa-chevron-up mr-2 align-self-center"></span>
-                    </button>
-                    <div class="container-tag-options bg-orange">
-                        <ul class="dropdown-choices bg-orange" id="utensils-dropdown">
-                
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
+     		<div class="dropdown-parent">
+     			<button id="utensils-tag-btn" class="btn bg-orange btn-lg mx-2 tag-btn show" type="button">Ustensiles
+     				<span class="fas fa-chevron-down"></span>
+     			</button>
+     			<div class="opened-btn-container">
+     				<button id="utensils-search" class="btn bg-orange tag-search">
+     					<input id="utensils-tag-input" class="form-control bg-orange tag-search-input" type="text" name="search-utensil" placeholder="Rechercher un ustensile">
+     					<span class="fas fa-chevron-up mr-2 align-self-center"></span>
+     				</button>
+     				<div class="container-tag-options bg-orange">
+     					<ul class="dropdown-choices bg-orange" id="utensils-dropdown">
+     			
+     					</ul>
+     				</div>
+     			</div>
+     		</div>
+  		</div>
 
-        <div class="card-deck ml-4 mt-4">
-            <div class="d-flex flex-wrap" id="main">
+  		<div class="card-deck pl-4">
+  			<div class="d-flex flex-wrap" id="main">
   
-            </div>
-        </div>
-            
-        </div>
+  			</div>
+  		</div>
+			
+		</div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
