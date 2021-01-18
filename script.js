@@ -154,7 +154,36 @@ console.log(filteredKeywordArr);
 //take only the keywords
 let allKeywords = [];
 filteredKeywordArr.forEach(item => {allKeywords.push(item.keyword)});
-let searchOptions = [...new Set(allKeywords.flat())];
+let flatKeyword = allKeywords.flat();
+let allKeywordsLowerCase = [];
+flatKeyword.forEach(word => {allKeywordsLowerCase.push(word.toLowerCase())});
+let searchOptionsNotSorted = [...new Set(allKeywordsLowerCase.flat())];
+//sort by alphabetical order
+let searchOptions = quickSort(searchOptionsNotSorted, 0, searchOptionsNotSorted.length-1);
+console.log(searchOptions);
+
+function KeywordObject(item) {
+	this.keyword = item;
+	let recipeIds = [];
+	for (let i=0; i<filteredKeywordArr.length; i++) {
+		if (filteredKeywordArr[i].keyword.indexOf(item) >= 0 ) {
+			recipeIds.push(filteredKeywordArr[i].id);
+		}
+	}
+	this.ids = recipeIds;
+}
+
+let keywordArray = (arr) => {
+	let newArr = [];
+	for (let i=0; i<arr.length; i++) {
+		let keyword = new KeywordObject(arr[i]);
+		newArr.push(keyword);
+	}
+	return newArr;
+}
+
+let keywordObjectArray = keywordArray(searchOptions);
+console.log(keywordObjectArray);
 
 //autocomplete function
 let autocomplete = (input, arr, minLength) => {
@@ -240,19 +269,39 @@ let autocomplete = (input, arr, minLength) => {
 let searchInput = document.getElementById("search-input");
 //implement the function on key press
 autocomplete(searchInput, searchOptions, 2);
-
+/*
 //binary search function
 let binarySearch = (obj, target) => {
 	let start = 0;
-	let end = obj.keyword.length-1;
+	let end = obj.length-1;
 	while(start <= end) {
 		let middleIndex = Math.floor((start+end)/2);
 
-		if (obj.keyword[middleIndex].toLowerCase().includes(target.toLowerCase())) {
-			return obj.id;
-		} else if (target.toLowerCase().localeCompare(obj.keyword[middleIndex].toLowerCase()) < 0) {
+		if (obj[middleIndex].keyword.toLowerCase().includes(target.toLowerCase())) {
+			return obj[middleIndex].ids;
+		} else if (target.toLowerCase().localeCompare(obj[middleIndex].keyword.toLowerCase()) < 0) {
 			end = middleIndex - 1;
-		} else if (target.toLowerCase().localeCompare(obj.keyword[middleIndex].toLowerCase()) > 0) {
+		} else if (target.toLowerCase().localeCompare(obj[middleIndex].keyword.toLowerCase()) > 0) {
+			start = middleIndex +1;
+		} else {
+			return -1;
+		}
+	}
+}*/
+
+let binarySearch = (array, target) => {
+	let start = 0;
+	let end = array.length-1;
+	if (start > end) {
+		return -1;
+	}
+	while(start <= end) {
+		let middleIndex = Math.floor((start+end)/2);
+		if (array[middleIndex].keyword.toLowerCase().includes(target.toLowerCase())) {
+			return middleIndex;
+		} else if (target.toLowerCase().localeCompare(array[middleIndex].keyword.toLowerCase()) < 0) {
+			end = middleIndex - 1;
+		} else if (target.toLowerCase().localeCompare(array[middleIndex].keyword.toLowerCase()) > 0) {
 			start = middleIndex +1;
 		} else {
 			return -1;
@@ -260,24 +309,54 @@ let binarySearch = (obj, target) => {
 	}
 }
 
+let binarySearchMultiple = (array, target) => {
+	let firstMatch = binarySearch(array, target);
+	let resultArr = [-1, -1];
+	if (firstMatch == -1) {
+		return resultArr;
+	}
+
+	let leftMost = firstMatch;
+	let rightMost = firstMatch;
+
+	if (firstMatch >= 0) {
+		while (leftMost > 0 && array[leftMost-1].keyword.includes(target)) {
+			leftMost--;
+		}
+		while (rightMost < array.length-1 && array[rightMost+1].keyword.includes(target)) {
+			rightMost++;
+		}
+	}
+
+	resultArr[0] = leftMost;
+	resultArr[1] = rightMost;
+
+	let allSelectedIndex = [];
+	for (let i=resultArr[0]; i<=resultArr[1]; i++) {
+		allSelectedIndex.push(i);
+	}
+
+	let selectedIds = [];
+	allSelectedIndex.forEach(index => {
+		selectedIds.push(array[index].ids);
+	});
+
+	return [...new Set(selectedIds.flat())].sort(function(a,b) {return a-b});	
+}
+
 //searching function
 let launchSearch = (e) => {
 	let mainSection = document.getElementById("main");
 	let cardElm = Array.from(document.getElementsByClassName("recipe-card"));
-	let selectedArr = [];
 	if (searchInput.value.length > 2) {
 		mainSection.innerHTML = "";
 		let input = e.target.value.toLowerCase();
-		for (let i=0; i<filteredKeywordArr.length; i++) {
-			let recipeId = binarySearch(filteredKeywordArr[i], input);
-			if (recipeId > 0) {
-				selectedArr.push(recipeId);
-			}
-		}
+		let selectedArr = binarySearchMultiple(keywordObjectArray, input);
+		
 		if (selectedArr.length > 0) {
 			selectedArr.forEach(recipeId => {
 			createCard(recipesArray[recipeId-1]);
-		})
+		});
 		} else {
 			mainSection.innerHTML = "<p id='noresult-msg'>Aucune recette ne correspond à votre critère… vous pouvez chercher « tarte aux pommes », « poisson », etc.</p>";
 		}
@@ -411,4 +490,4 @@ Array.from(document.getElementsByClassName("fa-chevron-up")).forEach(item => {
 	item.addEventListener("click", function() {
 		closeAllDropdowns();
 	});
-})
+});
