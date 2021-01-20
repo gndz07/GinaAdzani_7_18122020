@@ -10,7 +10,259 @@ input[type="text"] {
 
 .card-img-placeholder {
 	background-color: #c9bdbd;
+	min-height: 200px;input[type="text"] {
+	border: none;
+	border-color: transparent;
+}
+
+#search-input, #launch-search {
+	background-color: #e7e7e7;
+	border: none;
+}
+
+.card-img-placeholder {
+	background-color: #c9bdbd;
 	min-height: 200px;
+	border-radius: 10px 10px 0 0;
+}
+
+.recipe-card {
+	background-color: #f8f9fb;
+	border-radius: 10px;
+	min-width: 30%;
+	max-width: 30%;
+	cursor: pointer;
+}
+
+.card-content {
+	font-size: 0.9rem;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-height: 150px;
+}
+
+.card-content-title {
+	font-size: 1.5rem;
+}
+
+.btn {
+	padding: 1.25rem;
+	font-weight: 500;
+}
+
+.bg-green, .bg-green input[type="text"] {
+	background-color: #00dca9;
+	color: white;
+}
+
+.btn.bg-green:hover {
+	background-color: #00a881;
+}
+
+.bg-orange, .bg-orange input[type="text"] {
+	background-color: #ff5a47;
+	color: white;
+}
+
+.btn.bg-orange:hover {
+	background-color: #ff2c14;
+}
+
+.autocomplete-items {
+	position: absolute;
+	z-index: 2;
+	top: 100%;
+	left: 20px;
+	background-color: white;
+	width: 100%;
+}
+
+.autocomplete-items p:hover {
+	cursor: pointer;
+	background-color: #c9bdbd;
+}
+
+.autocomplete-active {
+	background-color: #c9bdbd;
+}
+
+.dropdown-parent {
+	position: relative;
+}
+
+.dropdown-choices {
+	display: none;
+}
+
+.show-opts .dropdown-choices {
+	display: flex;
+	flex-wrap: wrap;
+	writing-mode: vertical-lr;
+	z-index: 3;
+	max-width: 700px;
+	max-height: 400px;
+	overflow: hidden;
+	padding-left: 0;
+	margin: -0.5rem 0 0 0;
+	padding: 0;
+}
+
+.fa-chevron-down {
+	margin-left: 1rem;
+	margin-top: .5rem;
+}
+
+.tag-btn {
+	display: flex;
+	justify-content: space-between;
+	color: white;
+}
+
+.opened-btn-container.show {
+	width: fit-content;
+	display: flex;
+	flex-direction: column;
+
+}
+
+.tag-search {
+	display: none;
+	width: inherit;
+}
+
+.tag-search input[type="text"] {
+	color: white;
+}
+
+#ingredient-tag-input-autocomplete-lists {
+	background-color: #007bff;
+}
+
+.dropdown-item {
+	color: white;
+	cursor: pointer;
+	width: 33%;
+	writing-mode: horizontal-tb;
+}
+
+.selected-tag-btn {
+	color: white;
+	margin-right: 1rem;
+}
+
+.btn:hover {
+	color: white;
+}
+
+.show {
+	display: block;
+}
+
+.tag-search.show {
+	width: 100%;
+	display: flex;
+	justify-content: space-around;
+}
+
+.tag-search-input {
+	font-size: 1.2rem;
+}
+
+
+.tag-search-input::placeholder {
+	color: white;
+}
+
+.container-tag-options {
+	display: none;
+}
+.container-tag-options.show-opts {
+	max-height: 400px;
+	display: block;
+	border-radius: 0 0 .25rem .25rem;
+	margin-top: -0.125rem;
+	z-index: 2;
+	padding: .5rem;
+	font-size: 1.2rem;
+}
+
+.card-content-title {
+	min-height: 4rem;
+	max-height: fit-content;
+}
+
+.card-deck {
+	margin: 0!important;
+	position: absolute;
+	top: 25rem;
+}
+
+.ingredient-container {
+	overflow: hidden;
+}
+
+.description {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 6;
+	-webkit-box-orient: vertical;
+	text-align: justify;
+	padding-right: 1em;
+	margin: 0 -1em -2rem .5rem;
+}
+
+#noresult-msg {
+	font-size: 2rem;
+	font-weight: bold;
+	text-align: center;
+	margin-right: 4rem;
+}
+
+/* mobile view */
+@media all and (max-width: 768px) {
+	body {
+		margin: auto;
+		min-width: fit-content;
+	}
+
+	.btn-group {
+		flex-direction: column;
+	}
+
+	.btn {
+		font-size: 1rem;
+		padding: .5rem;
+		margin-bottom: .5rem;
+	}
+
+	.tag-search {
+		width: 100%;
+	}
+
+	.container-tag-options.show-opts {
+		font-size: 1rem;
+		height: 200px;
+		width: inherit;
+		overflow: hidden;
+	}
+
+	.show-opts .dropdown-choices {
+		flex-wrap: nowrap;
+	}
+
+	.card-deck {
+		top: 65%;
+	}
+
+	.recipe-card {
+		min-width: 90%;
+	}
+
+	#main {
+		flex-direction: column;
+	}
+}
 	border-radius: 10px 10px 0 0;
 }
 

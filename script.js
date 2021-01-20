@@ -320,6 +320,8 @@ document.addEventListener("click", function(e) {
 	} else if (e.target.matches(".tag-search-input")) { //prevent event bubble from clicking on input field
 		e.stopPropagation();
 		e.preventDefault();
+	} else if (e.target.matches(".fa-chevron-down")) { //prevent event bubble from clicking on down arrow
+		e.target.parentElement.click();
 	} else if (!e.target.matches(".tag-btn")) { //close dropdowns when click wherever
 		closeAllDropdowns();
 	}
@@ -331,6 +333,7 @@ let closeAllDropdowns = () => {
 	Array.from(document.getElementsByClassName("tag-search")).forEach(item => {item.classList.remove("show")});
 	Array.from(document.getElementsByClassName("container-tag-options")).forEach(item => {item.classList.remove("show-opts")});
 	Array.from(document.getElementsByClassName("opened-btn-container")).forEach(item => {item.classList.remove("show")});
+	Array.from(document.getElementsByClassName("fa-chevron-down")).forEach(item => {item.removeAttribute("style")});
 }
 //close by clicking on arrow up
 Array.from(document.getElementsByClassName("fa-chevron-up")).forEach(item => {
