@@ -182,7 +182,7 @@ input[type="text"] {
 .card-deck {
 	margin: 0!important;
 	position: absolute;
-	top: 45%;
+	top: 25rem;
 }
 
 .ingredient-container {

@@ -269,26 +269,8 @@ let autocomplete = (input, arr, minLength) => {
 let searchInput = document.getElementById("search-input");
 //implement the function on key press
 autocomplete(searchInput, searchOptions, 2);
-/*
-//binary search function
-let binarySearch = (obj, target) => {
-	let start = 0;
-	let end = obj.length-1;
-	while(start <= end) {
-		let middleIndex = Math.floor((start+end)/2);
 
-		if (obj[middleIndex].keyword.toLowerCase().includes(target.toLowerCase())) {
-			return obj[middleIndex].ids;
-		} else if (target.toLowerCase().localeCompare(obj[middleIndex].keyword.toLowerCase()) < 0) {
-			end = middleIndex - 1;
-		} else if (target.toLowerCase().localeCompare(obj[middleIndex].keyword.toLowerCase()) > 0) {
-			start = middleIndex +1;
-		} else {
-			return -1;
-		}
-	}
-}*/
-
+//simple binary search, to give the first found result
 let binarySearch = (array, target) => {
 	let start = 0;
 	let end = array.length-1;
@@ -309,6 +291,7 @@ let binarySearch = (array, target) => {
 	}
 }
 
+//binary search to get the range of all fitting result
 let binarySearchMultiple = (array, target) => {
 	let firstMatch = binarySearch(array, target);
 	let resultArr = [-1, -1];
@@ -484,6 +467,7 @@ let closeAllDropdowns = () => {
 	Array.from(document.getElementsByClassName("tag-search")).forEach(item => {item.classList.remove("show")});
 	Array.from(document.getElementsByClassName("container-tag-options")).forEach(item => {item.classList.remove("show-opts")});
 	Array.from(document.getElementsByClassName("opened-btn-container")).forEach(item => {item.classList.remove("show")});
+	Array.from(document.getElementsByClassName("fa-chevron-down")).forEach(item => {item.removeAttribute("style")});
 }
 //close by clicking on arrow up
 Array.from(document.getElementsByClassName("fa-chevron-up")).forEach(item => {
