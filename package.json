@@ -1,0 +1,22 @@
+{
+  "name": "oc-p7",
+  "version": "1.0.0",
+  "description": "",
+  "main": "recipe-rawdata.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gndz07/GinaAdzani_7_18122020.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gndz07/GinaAdzani_7_18122020/issues"
+  },
+  "homepage": "https://github.com/gndz07/GinaAdzani_7_18122020#readme",
+  "devDependencies": {
+    "eslint": "^7.18.0"
+  }
+}

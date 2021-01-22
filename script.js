@@ -7,8 +7,8 @@ console.log(recipesArray);
 const create = (elm, attributes) => {
 	const element = document.createElement(elm);
 	for (let key in attributes) {
-    	element.setAttribute(key, attributes[key])
-  	}
+		element.setAttribute(key, attributes[key])
+	}
 	return element;
 }
 
@@ -87,13 +87,13 @@ recipesArray.forEach(recipe => createCard(recipe));
 let quickSort = (array, left, right) => {
 	let index;
 	if (array.length > 1) {
-       	index = partition(array, left, right); //take index from partition
-       	if (left<index-1) { //more elements on the left
-       		quickSort(array, left, index-1);
-       	}
-       	if (index<right) { //more elements on the right
-       		quickSort(array, index, right);
-       	}
+		index = partition(array, left, right); //take index from partition
+		if (left<index-1) { //more elements on the left
+			quickSort(array, left, index-1);
+		}
+		if (index<right) { //more elements on the right
+			quickSort(array, index, right);
+		}
 	}
 	return array;
 }
@@ -330,7 +330,6 @@ let binarySearchMultiple = (array, target) => {
 //searching function
 let launchSearch = (e) => {
 	let mainSection = document.getElementById("main");
-	let cardElm = Array.from(document.getElementsByClassName("recipe-card"));
 	if (searchInput.value.length > 2) {
 		mainSection.innerHTML = "";
 		let input = e.target.value.toLowerCase();
